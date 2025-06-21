@@ -1,6 +1,6 @@
 # Neuro-AI Explorer 
 
-Welcome to the Neuro-AI Explorer! This is a web-based, interactive Q&A application designed to educate users on the parallels and differences between biological brains (neuroscience) and artificial intelligence (AI).
+Welcome to the Neural Intelligence Lab! This is a web-based, interactive Q&A application designed to educate users on the parallels and differences between biological brains (neuroscience) and artificial intelligence (AI).
 
 This application is built using a Retrieval-Augmented Generation (RAG) pipeline, which allows it to answer questions based on a curated knowledge base of text documents.
 

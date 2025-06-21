@@ -45,7 +45,10 @@ def display_header():
     """Displays the header and introduction of the app."""
     st.title("Neural Intelligence Lab")
     st.write("Ask a question about the fascinating parallels and differences...") # Truncated for brevity
-    st.write("Example: *How does memory in an AI compare to a human brain?*")
+    st.write("How does learning happen in brains vs. AI?")
+    st.write("How is a biological neuron different from an artificial neuron?")
+    st.write("Why can AI beat humans at chess but struggle with common sense?")
+    st.write("Could we download our memories into AI?")
 
 def display_response_and_feedback():
     """Displays the generated answer, sources, and feedback buttons."""

@@ -6,6 +6,7 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 import os
 import streamlit as st
+import re # Import the regular expressions library
 from langchain_community.document_loaders import DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -20,38 +21,18 @@ DB_DIR = 'db'
 
 # --- Functions for building/loading the RAG pipeline ---
 
-def load_documents():
-    """Loads documents from the knowledge base directory."""
-    loader = DirectoryLoader(KNOWLEDGE_BASE_DIR, glob="**/*.txt")
-    return loader.load()
-
-def split_documents(documents):
-    """Splits documents into smaller chunks."""
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
-    return text_splitter.split_documents(documents)
-
-def get_embedding_function():
-    """Initializes the embedding model."""
-    return HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-
-def setup_vector_database(documents):
-    """Creates and persists the vector database."""
-    print("Setting up vector database...")
-    embeddings = get_embedding_function()
-    db = Chroma.from_documents(
-        documents, embeddings, persist_directory=DB_DIR
-    )
-    print("Vector database setup complete.")
-    return db
-
 def get_vector_db():
     """Loads the vector database. Builds it if it doesn't exist."""
-    embedding_function = get_embedding_function()
+    embedding_function = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     if not os.path.exists(DB_DIR):
         print("Database not found. Building now...")
-        documents = load_documents()
-        text_chunks = split_documents(documents)
-        db = setup_vector_database(text_chunks)
+        loader = DirectoryLoader(KNOWLEDGE_BASE_DIR, glob="**/*.txt")
+        documents = loader.load()
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+        text_chunks = text_splitter.split_documents(documents)
+        db = Chroma.from_documents(
+            text_chunks, embedding_function, persist_directory=DB_DIR
+        )
     else:
         db = Chroma(persist_directory=DB_DIR, embedding_function=embedding_function)
     return db
@@ -65,7 +46,6 @@ def query_rag(query_text: str):
     vector_db = get_vector_db()
     retriever = vector_db.as_retriever(search_kwargs={"k": 3})
     
-    # Define the prompt template
     prompt_template = """
     You are the Neuro-AI Explorer, an expert AI assistant. Your goal is to provide clear, concise, and accurate answers based on the context provided.
     Compare and contrast the concepts from the provided text, focusing on the user's question.
@@ -79,17 +59,13 @@ def query_rag(query_text: str):
     
     ANSWER:
     """
-    
     prompt = ChatPromptTemplate.from_template(prompt_template)
-    
-    # Initialize the LLM
     llm = ChatGroq(
         temperature=0.2,
         model_name="llama3-70b-8192",
         api_key=st.secrets["GROQ_API_KEY"]
     )
     
-    # Create the RAG chain
     rag_chain = (
         {"context": retriever, "question": (lambda x: x)}
         | prompt
@@ -97,10 +73,44 @@ def query_rag(query_text: str):
         | StrOutputParser()
     )
     
-    # Invoke the chain
     response = rag_chain.invoke(query_text)
-    
-    # Retrieve the source documents
     source_docs = retriever.invoke(query_text)
     
     return response, source_docs
+
+# --- NEW FUNCTION FOR RELATED QUESTIONS ---
+
+def generate_related_questions(query: str, answer: str):
+    """
+    Generates a list of related questions based on the query and answer.
+    """
+    prompt_template = """
+    Based on the following user query and the provided answer, please generate 3 to 5 follow-up questions that would be logical next steps for a curious user to explore.
+    The questions should be distinct from the original query and delve deeper into related topics or explore new, relevant tangents.
+    Return ONLY the questions, each on a new line, and starting with a number (e.g., "1. How does..."). Do not include any other text or preamble.
+
+    ORIGINAL QUERY:
+    {query}
+
+    GENERATED ANSWER:
+    {answer}
+
+    RELATED QUESTIONS:
+    """
+    
+    prompt = ChatPromptTemplate.from_template(prompt_template)
+    
+    llm = ChatGroq(
+        temperature=0.7,  # Higher temperature for more creative questions
+        model_name="llama3-8b-8192", # Use a smaller, faster model for this task
+        api_key=st.secrets["GROQ_API_KEY"]
+    )
+    
+    question_generation_chain = prompt | llm | StrOutputParser()
+    
+    response_text = question_generation_chain.invoke({"query": query, "answer": answer})
+    
+    # Use regular expressions to parse the numbered list of questions
+    questions = re.findall(r'^\d+\.\s*(.*)', response_text, re.MULTILINE)
+    
+    return questions
