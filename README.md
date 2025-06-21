@@ -4,7 +4,7 @@ Welcome to the Neuro-AI Explorer! This is a web-based, interactive Q&A applicati
 
 This application is built using a Retrieval-Augmented Generation (RAG) pipeline, which allows it to answer questions based on a curated knowledge base of text documents.
 
-**Live Application URL:** [https://tab-alk-neuro-ai-explorer.streamlit.app/](https://tab-alk-neuro-ai-explorer.streamlit.app/)
+**Live Application URL:** [https://neuro-ai-explorer-pmyhumw8fev2ajhuf2pacl.streamlit.app/)
 
 ![Neuro-AI Explorer Screenshot](https://i.imgur.com/8aV4Y1U.png)
 
