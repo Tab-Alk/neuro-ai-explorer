@@ -58,7 +58,7 @@ def display_response_and_feedback():
     st.write(response_data["answer"])
     
     # --- NEW: Placeholder for Related Questions ---
-    with st.expander("🤔 Explore Related Concepts"):
+    with st.expander("See questions related to your topic..."):
         st.write("Here are some related questions you might want to explore:")
         st.button("How is long-term memory consolidation different in brains vs. AI?", disabled=True)
         st.button("What are the ethical implications of advanced AI memory?", disabled=True)
@@ -66,7 +66,7 @@ def display_response_and_feedback():
     # --- END NEW SECTION ---
 
     st.markdown("---")
-    st.subheader("Sources (with highlighting):")
+    st.subheader("The Science Behind It:")
 
     # Combine all source documents into one text block for processing
     full_source_text = "\n\n".join([doc.page_content for doc in response_data["sources"]])
@@ -75,7 +75,7 @@ def display_response_and_feedback():
     highlighted_source = highlight_text(full_source_text, response_data["answer"])
     
     # Display the highlighted source text in an expander
-    with st.expander("**View Highlighted Source Text**"):
+    with st.expander("**View the Highlighted Source Material Used...**"):
         st.markdown(highlighted_source, unsafe_allow_html=True)
         
     # Display feedback buttons if not already given
