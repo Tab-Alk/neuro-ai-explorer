@@ -6,7 +6,7 @@ import time
 
 st.set_page_config(page_title="Neuro-AI Explorer", page_icon="🤖")
 
-st.title("🧠 Neuro-AI Explorer 🤖")
+st.title(" Neuro-AI Explorer ")
 st.write(
     "Ask a question about the fascinating parallels and differences "
     "between biological brains and artificial intelligence."
