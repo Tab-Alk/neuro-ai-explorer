@@ -1,0 +1,13 @@
+# Python virtual environment
+.venv/
+venv/
+
+# Caches
+__pycache__/
+
+# Local Chroma database
+db/
+
+# IDE / OS specific files
+.vscode/
+.DS_Store
