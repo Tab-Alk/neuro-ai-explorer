@@ -7,7 +7,7 @@ from core_engine import query_rag
 st.set_page_config(page_title="Neuro-AI Explorer", page_icon="🤖")
 
 # Display the title and a short introduction
-st.title("🧠 Neuro-AI Explorer 🤖")
+st.title("Neuro-AI Explorer ")
 st.write(
     "Ask a question about the fascinating parallels and differences "
     "between biological brains and artificial intelligence."

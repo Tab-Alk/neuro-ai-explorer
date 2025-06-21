@@ -6,3 +6,4 @@ sentence-transformers
 pypdf
 unstructured
 streamlit
+pysqlite3-binary

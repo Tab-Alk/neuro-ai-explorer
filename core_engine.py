@@ -1,3 +1,15 @@
+# --- PATCH FOR STREAMLIT DEPLOYMENT ---
+# This is a hack to use the newer version of sqlite3
+# See: https://discuss.streamlit.io/t/issues-with-chromadb-and-sqlite3-on-streamlit-community-cloud/47769
+import sys
+__import__('pysqlite3')
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+# --- END PATCH ---
+
+import os
+from langchain_community.document_loaders import DirectoryLoader
+# ... the rest of your code continues below ...
+
 import os
 from langchain_community.document_loaders import DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
