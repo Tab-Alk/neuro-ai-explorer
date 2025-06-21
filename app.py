@@ -43,7 +43,7 @@ def highlight_text(source_text, generated_answer, threshold=85):
 # --- UI Rendering Functions ---
 def display_header():
     """Displays the header and introduction of the app."""
-    st.title("🧠 Neuro-AI Explorer 🤖")
+    st.title("Neural Intelligence Lab")
     st.write("Ask a question about the fascinating parallels and differences...") # Truncated for brevity
     st.write("Example: *How does memory in an AI compare to a human brain?*")
 
@@ -54,6 +54,14 @@ def display_response_and_feedback():
     st.subheader("Answer:")
     st.write(response_data["answer"])
     
+    # --- NEW: Placeholder for Related Questions ---
+    with st.expander("🤔 Explore Related Concepts"):
+        st.write("Here are some related questions you might want to explore:")
+        st.button("How is long-term memory consolidation different in brains vs. AI?", disabled=True)
+        st.button("What are the ethical implications of advanced AI memory?", disabled=True)
+        st.button("Can an AI truly 'forget' like a human does?", disabled=True)
+    # --- END NEW SECTION ---
+
     st.markdown("---")
     st.subheader("Sources (with highlighting):")
 
