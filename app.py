@@ -58,7 +58,7 @@ def display_response_and_feedback():
     st.write(response_data["answer"])
     
     # --- NEW: Placeholder for Related Questions ---
-    with st.expander("See questions related to your topic..."):
+    with st.expander("See questions related to your topic"):
         st.write("Here are some related questions you might want to explore:")
         st.button("How is long-term memory consolidation different in brains vs. AI?", disabled=True)
         st.button("What are the ethical implications of advanced AI memory?", disabled=True)
@@ -75,7 +75,7 @@ def display_response_and_feedback():
     highlighted_source = highlight_text(full_source_text, response_data["answer"])
     
     # Display the highlighted source text in an expander
-    with st.expander("**View the Highlighted Source Material Used...**"):
+    with st.expander("**View the Highlighted Source Material Used**"):
         st.markdown(highlighted_source, unsafe_allow_html=True)
         
     # Display feedback buttons if not already given
