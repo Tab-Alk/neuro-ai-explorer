@@ -1,4 +1,4 @@
-# Neuro-AI Explorer 
+# The Neural Intelligence Lab
 
 Welcome to the Neural Intelligence Lab! This is a web-based, interactive Q&A application designed to educate users on the parallels and differences between biological brains (neuroscience) and artificial intelligence (AI).
 
