@@ -45,10 +45,10 @@ def display_header():
     """Displays the header and introduction of the app."""
     st.title("Neural Intelligence Lab")
     st.write("Ask a question about the fascinating parallels and differences...") # Truncated for brevity
-    st.write("How does learning happen in brains vs. AI?")
-    st.write("How is a biological neuron different from an artificial neuron?")
-    st.write("Why can AI beat humans at chess but struggle with common sense?")
-    st.write("Could we download our memories into AI?")
+    st.write("*How does memory in an AI compare to a human brain?*")
+    st.write("*How is a biological neuron different from an artificial neuron?*")
+    st.write("*Why can AI beat humans at chess but struggle with common sense?*")
+    st.write("*Could we download our memories into AI?*")
 
 def display_response_and_feedback():
     """Displays the generated answer, sources, and feedback buttons."""
@@ -58,7 +58,7 @@ def display_response_and_feedback():
     st.write(response_data["answer"])
     
     # --- NEW: Placeholder for Related Questions ---
-    with st.expander("See questions related to your topic"):
+    with st.expander("**See questions related to your topic**"):
         st.write("Here are some related questions you might want to explore:")
         st.button("How is long-term memory consolidation different in brains vs. AI?", disabled=True)
         st.button("What are the ethical implications of advanced AI memory?", disabled=True)
