@@ -69,4 +69,3 @@ To run this project on your own machine, follow these steps:
     ```
 
 ---
-*This project was built collaboratively with Gemini, an AI pair-programming partner from Google.*
