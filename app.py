@@ -33,12 +33,9 @@ def display_response_area():
     if st.session_state.related_questions:
         with st.expander("Explore Related Concepts"):
             for q in st.session_state.related_questions:
-                # When a related question button is clicked, it will rerun the script
-                # and the query will be handled at the top of the script.
                 if st.button(q, key=f"related_q_{q}"):
-                    st.session_state.user_query = q # Set the query to the button's text
-                    st.rerun() # Rerun the app to process the new query
-    # --- END LIVE SECTION ---
+                    st.session_state.user_query = q 
+                    st.rerun() 
     
     st.markdown("---")
     st.subheader("Sources (with highlighting):")
@@ -69,7 +66,6 @@ def handle_query(query):
     with st.spinner("Generating related questions..."):
         st.session_state.related_questions = generate_related_questions(query, answer)
 
-# (We are keeping the highlight_text function from the last upgrade, but it's not shown here for brevity)
 from nltk.tokenize import sent_tokenize
 from thefuzz import fuzz
 def highlight_text(source_text, generated_answer, threshold=85):
@@ -90,23 +86,28 @@ def highlight_text(source_text, generated_answer, threshold=85):
 
 # --- Main Application Execution ---
 import nltk
+# --- MODIFIED SECTION ---
 try:
+    # Check if the tokenizer data is available
     nltk.data.find('tokenizers/punkt')
-except nltk.downloader.DownloadError:
+except LookupError: # Use the correct, modern exception
+    # If not available, download it
+    print("NLTK 'punkt' tokenizer not found. Downloading...")
     nltk.download('punkt')
+    print("Download complete.")
+# --- END MODIFIED SECTION ---
+
 
 st.set_page_config(page_title="The Neural Intelligence Lab")
 initialize_state()
 display_header()
 
-# This session state variable will be our primary user input
 if 'user_query' not in st.session_state:
     st.session_state.user_query = ""
 
 def set_query_from_input():
     st.session_state.user_query = st.session_state.input_query
 
-# Use a key for the text_input to link it to our callback
 st.text_input(
     "Your Question:", 
     key="input_query",
@@ -114,12 +115,9 @@ st.text_input(
     placeholder="Type your question here..."
 )
 
-# If user_query has a value, it means a question was submitted
-# (either by typing or by clicking a related question button)
 if st.session_state.user_query:
     handle_query(st.session_state.user_query)
-    st.session_state.user_query = "" # Clear query after processing
+    st.session_state.user_query = "" 
 
-# Display the response area if a response exists in the state
 if st.session_state.response:
     display_response_area()
