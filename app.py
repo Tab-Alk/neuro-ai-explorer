@@ -1,9 +1,14 @@
 import streamlit as st
 from core_engine import query_rag, generate_related_questions
 import time
-import nltk # Make sure nltk is imported at the top
+import nltk
 from nltk.tokenize import sent_tokenize
 from thefuzz import fuzz
+
+# --- NEW: Point NLTK to our local data folder ---
+# This line tells NLTK to look for data in the 'nltk_data' folder we created.
+nltk.data.path.append('nltk_data')
+
 
 # --- App State Management ---
 def initialize_state():
@@ -16,14 +21,7 @@ def initialize_state():
 # --- Text Processing and Highlighting ---
 def highlight_text(source_text, generated_answer, threshold=85):
     """Highlights sentences in source_text that are similar to sentences in generated_answer."""
-    # --- NEW ROBUST DOWNLOAD ---
-    # Ensure the 'punkt' tokenizer data is available before using it.
-    try:
-        nltk.data.find('tokenizers/punkt')
-    except LookupError:
-        nltk.download('punkt')
-    # --- END NEW SECTION ---
-
+    # The download logic is no longer needed here because the data is bundled.
     source_sentences = sent_tokenize(source_text)
     answer_sentences = sent_tokenize(generated_answer)
     
@@ -45,21 +43,14 @@ def highlight_text(source_text, generated_answer, threshold=85):
 
 
 # --- UI Rendering Functions ---
+# (The rest of the file remains the same as the last version)
 def display_header():
-    """Displays the header and introduction of the app."""
     st.title("The Neural Intelligence Lab")
-    st.write(
-        "Ask a question about the fascinating parallels and differences "
-        "between biological brains and artificial intelligence."
-    )
-    st.write(
-        "Example: *How does memory in an AI compare to a human brain?*"
-    )
+    st.write("Ask a question about the fascinating parallels and differences between biological brains and artificial intelligence.")
+    st.write("Example: *How does memory in an AI compare to a human brain?*")
 
 def display_response_area():
-    """Displays the generated answer, sources, related questions, and feedback."""
     response_data = st.session_state.response
-    
     st.subheader("Answer:")
     st.write(response_data["answer"])
 
@@ -88,14 +79,9 @@ def display_response_area():
 
 # --- Core Logic Functions ---
 def handle_query(query):
-    """Handles the query submission, including generating the main answer and related questions."""
     with st.spinner("Synthesizing answer..."):
         answer, sources = query_rag(query)
-        st.session_state.response = {
-            "query": query,
-            "answer": answer,
-            "sources": sources
-        }
+        st.session_state.response = {"query": query, "answer": answer, "sources": sources}
     with st.spinner("Generating related questions..."):
         st.session_state.related_questions = generate_related_questions(query, answer)
 
