@@ -33,8 +33,8 @@ def get_vector_db():
         loader = JSONLoader(
             file_path=file_path,
             jq_schema='.',          # Load the entire JSON object from each line
-            content_key="content",  # Use the 'content' field for the main text
-            json_lines=True         # Specify that it's a JSON Lines file
+            content_key="text",     # The key in your file is "text", not "content"
+            json_lines=True         
         )
         # --- END CORRECTION ---
         
