@@ -43,7 +43,7 @@ def highlight_text(source_text, generated_answer, threshold=85):
 # --- UI Rendering Functions ---
 def display_header():
     """Displays the header and introduction of the app."""
-    st.title("Neural Intelligence Lab")
+    st.title("The Neural Intelligence Lab")
     st.write("Ask a question about the fascinating parallels and differences...") # Truncated for brevity
     st.write("*How does memory in an AI compare to a human brain?*")
     st.write("*How is a biological neuron different from an artificial neuron?*")
@@ -124,7 +124,7 @@ def handle_feedback(positive: bool):
 import nltk
 nltk.download('punkt')
 
-st.set_page_config(page_title="Neuro-AI Explorer", page_icon="🤖")
+st.set_page_config(page_title="The Neural Intelligence Lab")
 initialize_state()
 display_header()
 user_query = st.text_input("Your Question:", placeholder="Type your question here...")
