@@ -2,18 +2,8 @@ import streamlit as st
 from core_engine import query_rag, generate_related_questions
 import time
 import nltk
-from nltk.tokenize import sent_tokenize
 from thefuzz import fuzz
 import os # Import the 'os' module for path operations
-
-# --- NEW: Point NLTK to our local data folder using an Absolute Path ---
-# This is a more robust method for cloud deployments.
-# It finds the directory where app.py is located and builds a full path from there.
-APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-NLTK_DATA_PATH = os.path.join(APP_ROOT, "nltk_data")
-nltk.data.path.append(NLTK_DATA_PATH)
-# --- END NEW SECTION ---
-
 
 # --- App State Management ---
 def initialize_state():
@@ -26,11 +16,25 @@ def initialize_state():
 # --- Text Processing and Highlighting ---
 def highlight_text(source_text, generated_answer, threshold=85):
     """Highlights sentences in source_text that are similar to sentences in generated_answer."""
-    source_sentences = sent_tokenize(source_text)
-    answer_sentences = sent_tokenize(generated_answer)
-    
-    highlighted_sentences = set()
+    # --- NEW: Manually load the tokenizer to bypass NLTK's failing search function ---
+    try:
+        # Construct the absolute path to the punkt tokenizer pickle file
+        APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+        PUNKT_PATH = os.path.join(APP_ROOT, "nltk_data", "tokenizers", "punkt", "english.pickle")
+        
+        # Load the tokenizer manually from the pickle file
+        tokenizer = nltk.data.load(PUNKT_PATH)
+        
+        # Use the tokenizer's .tokenize() method directly
+        source_sentences = tokenizer.tokenize(source_text)
+        answer_sentences = tokenizer.tokenize(generated_answer)
+    except Exception as e:
+        # If loading fails for any reason, fall back gracefully
+        st.error(f"Error during sentence tokenization: {e}")
+        return source_text
+    # --- END NEW SECTION ---
 
+    highlighted_sentences = set()
     for a_sent in answer_sentences:
         for s_sent in source_sentences:
             if fuzz.token_set_ratio(a_sent, s_sent) > threshold:
@@ -47,6 +51,7 @@ def highlight_text(source_text, generated_answer, threshold=85):
 
 
 # --- UI Rendering Functions ---
+# (The rest of the file remains the same)
 def display_header():
     st.title("The Neural Intelligence Lab")
     st.write("Ask a question about the fascinating parallels and differences between biological brains and artificial intelligence.")
