@@ -7,7 +7,6 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import os
 import streamlit as st
 import re
-# NEW IMPORT for JSONLoader
 from langchain_community.document_loaders import JSONLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
@@ -29,40 +28,35 @@ def get_vector_db():
         print("Database not found. Building now from .jsonl file...")
         
         # --- MODIFIED SECTION TO LOAD JSONL ---
-        # Define the path to your .jsonl file
         file_path = os.path.join(KNOWLEDGE_BASE_DIR, 'neural_lab_kb.jsonl')
 
-        # Configure the loader to extract the "content" field from each JSON line
         loader = JSONLoader(
             file_path=file_path,
-            jq_schema='.content', # This extracts the text from the 'content' key
-            json_lines=True,      # This tells the loader to treat each line as a separate JSON object
-            text_content=False    # We have text in the 'content' field, not as the whole file
+            jq_schema='.content', 
+            json_lines=True,      
+            text_content=False    
         )
         
         documents = loader.load()
+        
+        # We no longer need to split documents loaded from JSONL this way,
+        # as each line is already a self-contained document.
+        # The 'content' of each doc will be chunked during the embedding process if needed.
+        text_chunks = documents 
         # --- END MODIFIED SECTION ---
 
-        # We still split the loaded content in case a single entry is very long
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
-        text_chunks = text_splitter.split_documents(documents)
-        
-        # Create and persist the vector database from the chunks
         db = Chroma.from_documents(
             text_chunks, embedding_function, persist_directory=DB_DIR
         )
         print("Vector database setup complete.")
     else:
-        # Load the persisted database from disk
         db = Chroma(persist_directory=DB_DIR, embedding_function=embedding_function)
     return db
 
+# (The rest of the file remains the same)
 # --- Function for the RAG chain ---
 
 def query_rag(query_text: str):
-    """
-    Queries the RAG pipeline and generates a response.
-    """
     vector_db = get_vector_db()
     retriever = vector_db.as_retriever(search_kwargs={"k": 3})
     
@@ -101,9 +95,6 @@ def query_rag(query_text: str):
 # --- Function for Related Questions ---
 
 def generate_related_questions(query: str, answer: str):
-    """
-    Generates a list of related questions based on the query and answer.
-    """
     prompt_template = """
     Based on the following user query and the provided answer, please generate 3 to 5 follow-up questions that would be logical next steps for a curious user to explore.
     The questions should be distinct from the original query and delve deeper into related topics or explore new, relevant tangents.
