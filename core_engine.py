@@ -6,8 +6,9 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 import os
 import streamlit as st
-import re # Import the regular expressions library
-from langchain_community.document_loaders import DirectoryLoader
+import re
+# NEW IMPORT for JSONLoader
+from langchain_community.document_loaders import JSONLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
@@ -25,15 +26,34 @@ def get_vector_db():
     """Loads the vector database. Builds it if it doesn't exist."""
     embedding_function = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     if not os.path.exists(DB_DIR):
-        print("Database not found. Building now...")
-        loader = DirectoryLoader(KNOWLEDGE_BASE_DIR, glob="**/*.txt")
+        print("Database not found. Building now from .jsonl file...")
+        
+        # --- MODIFIED SECTION TO LOAD JSONL ---
+        # Define the path to your .jsonl file
+        file_path = os.path.join(KNOWLEDGE_BASE_DIR, 'neural_lab_kb.jsonl')
+
+        # Configure the loader to extract the "content" field from each JSON line
+        loader = JSONLoader(
+            file_path=file_path,
+            jq_schema='.content', # This extracts the text from the 'content' key
+            json_lines=True,      # This tells the loader to treat each line as a separate JSON object
+            text_content=False    # We have text in the 'content' field, not as the whole file
+        )
+        
         documents = loader.load()
+        # --- END MODIFIED SECTION ---
+
+        # We still split the loaded content in case a single entry is very long
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
         text_chunks = text_splitter.split_documents(documents)
+        
+        # Create and persist the vector database from the chunks
         db = Chroma.from_documents(
             text_chunks, embedding_function, persist_directory=DB_DIR
         )
+        print("Vector database setup complete.")
     else:
+        # Load the persisted database from disk
         db = Chroma(persist_directory=DB_DIR, embedding_function=embedding_function)
     return db
 
@@ -47,7 +67,7 @@ def query_rag(query_text: str):
     retriever = vector_db.as_retriever(search_kwargs={"k": 3})
     
     prompt_template = """
-    You are the Neuro-AI Explorer, an expert AI assistant. Your goal is to provide clear, concise, and accurate answers based on the context provided.
+    You are an expert AI assistant. Your goal is to provide clear, concise, and accurate answers based on the context provided.
     Compare and contrast the concepts from the provided text, focusing on the user's question.
     Do not mention that you are answering from a provided context.
     
@@ -78,7 +98,7 @@ def query_rag(query_text: str):
     
     return response, source_docs
 
-# --- NEW FUNCTION FOR RELATED QUESTIONS ---
+# --- Function for Related Questions ---
 
 def generate_related_questions(query: str, answer: str):
     """
@@ -99,18 +119,14 @@ def generate_related_questions(query: str, answer: str):
     """
     
     prompt = ChatPromptTemplate.from_template(prompt_template)
-    
     llm = ChatGroq(
-        temperature=0.7,  # Higher temperature for more creative questions
-        model_name="llama3-8b-8192", # Use a smaller, faster model for this task
+        temperature=0.7,
+        model_name="llama3-8b-8192",
         api_key=st.secrets["GROQ_API_KEY"]
     )
     
     question_generation_chain = prompt | llm | StrOutputParser()
-    
     response_text = question_generation_chain.invoke({"query": query, "answer": answer})
-    
-    # Use regular expressions to parse the numbered list of questions
     questions = re.findall(r'^\d+\.\s*(.*)', response_text, re.MULTILINE)
     
     return questions
