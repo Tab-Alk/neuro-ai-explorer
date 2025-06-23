@@ -9,3 +9,5 @@ streamlit
 pysqlite3-binary
 langchain-groq
 thefuzz
+python-Levenshtein
+jq
