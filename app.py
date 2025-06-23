@@ -58,12 +58,6 @@ def display_response_area():
     st.subheader("Answer:")
     st.write(response_data["answer"])
 
-    # --- ADD THIS DEBUG BLOCK HERE ---
-    st.subheader("--- DEBUG INFO ---")
-    st.write("Below is the raw 'sources' object returned by the RAG engine:")
-    st.write(response_data["sources"])
-    # --- END DEBUGGING ---
-
     if st.session_state.related_questions:
         with st.expander("Explore Related Concepts"):
             for q in st.session_state.related_questions:

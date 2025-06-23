@@ -27,23 +27,18 @@ def get_vector_db():
     if not os.path.exists(DB_DIR):
         print("Database not found. Building now from .jsonl file...")
         
-        # --- MODIFIED SECTION TO LOAD JSONL ---
         file_path = os.path.join(KNOWLEDGE_BASE_DIR, 'neural_lab_kb.jsonl')
 
+        # --- CORRECTED JSONLoader CONFIGURATION ---
         loader = JSONLoader(
             file_path=file_path,
-            jq_schema='.content', 
-            json_lines=True,      
-            text_content=False    
+            json_lines=True,
+            content_key="content"  # Use the direct content_key argument
         )
+        # --- END CORRECTION ---
         
         documents = loader.load()
-        
-        # We no longer need to split documents loaded from JSONL this way,
-        # as each line is already a self-contained document.
-        # The 'content' of each doc will be chunked during the embedding process if needed.
         text_chunks = documents 
-        # --- END MODIFIED SECTION ---
 
         db = Chroma.from_documents(
             text_chunks, embedding_function, persist_directory=DB_DIR
