@@ -1,9 +1,8 @@
 import streamlit as st
 from core_engine import query_rag, generate_related_questions
 import time
-import nltk
+import re # Import the regular expressions library
 from thefuzz import fuzz
-import os # Import the 'os' module for path operations
 
 # --- App State Management ---
 def initialize_state():
@@ -14,27 +13,22 @@ def initialize_state():
         st.session_state.related_questions = []
 
 # --- Text Processing and Highlighting ---
+
+def sent_tokenize_regex(text: str) -> list[str]:
+    """A simple, self-contained sentence tokenizer using regular expressions."""
+    # This regex splits the text at any occurrence of . ! ? followed by a space.
+    sentences = re.split(r'(?<=[.!?])\s+', text)
+    # It returns a list of sentences, removing any empty strings that might result.
+    return [s.strip() for s in sentences if s.strip()]
+
 def highlight_text(source_text, generated_answer, threshold=85):
     """Highlights sentences in source_text that are similar to sentences in generated_answer."""
-    # --- NEW: Manually load the tokenizer to bypass NLTK's failing search function ---
-    try:
-        # Construct the absolute path to the punkt tokenizer pickle file
-        APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-        PUNKT_PATH = os.path.join(APP_ROOT, "nltk_data", "tokenizers", "punkt", "english.pickle")
-        
-        # Load the tokenizer manually from the pickle file
-        tokenizer = nltk.data.load(PUNKT_PATH)
-        
-        # Use the tokenizer's .tokenize() method directly
-        source_sentences = tokenizer.tokenize(source_text)
-        answer_sentences = tokenizer.tokenize(generated_answer)
-    except Exception as e:
-        # If loading fails for any reason, fall back gracefully
-        st.error(f"Error during sentence tokenization: {e}")
-        return source_text
-    # --- END NEW SECTION ---
-
+    # We now use our own self-contained sentence tokenizer.
+    source_sentences = sent_tokenize_regex(source_text)
+    answer_sentences = sent_tokenize_regex(generated_answer)
+    
     highlighted_sentences = set()
+
     for a_sent in answer_sentences:
         for s_sent in source_sentences:
             if fuzz.token_set_ratio(a_sent, s_sent) > threshold:
