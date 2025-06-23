@@ -4,10 +4,15 @@ import time
 import nltk
 from nltk.tokenize import sent_tokenize
 from thefuzz import fuzz
+import os # Import the 'os' module for path operations
 
-# --- NEW: Point NLTK to our local data folder ---
-# This line tells NLTK to look for data in the 'nltk_data' folder we created.
-nltk.data.path.append('nltk_data')
+# --- NEW: Point NLTK to our local data folder using an Absolute Path ---
+# This is a more robust method for cloud deployments.
+# It finds the directory where app.py is located and builds a full path from there.
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+NLTK_DATA_PATH = os.path.join(APP_ROOT, "nltk_data")
+nltk.data.path.append(NLTK_DATA_PATH)
+# --- END NEW SECTION ---
 
 
 # --- App State Management ---
@@ -21,7 +26,6 @@ def initialize_state():
 # --- Text Processing and Highlighting ---
 def highlight_text(source_text, generated_answer, threshold=85):
     """Highlights sentences in source_text that are similar to sentences in generated_answer."""
-    # The download logic is no longer needed here because the data is bundled.
     source_sentences = sent_tokenize(source_text)
     answer_sentences = sent_tokenize(generated_answer)
     
@@ -43,7 +47,6 @@ def highlight_text(source_text, generated_answer, threshold=85):
 
 
 # --- UI Rendering Functions ---
-# (The rest of the file remains the same as the last version)
 def display_header():
     st.title("The Neural Intelligence Lab")
     st.write("Ask a question about the fascinating parallels and differences between biological brains and artificial intelligence.")
