@@ -1,6 +1,9 @@
 import streamlit as st
 from core_engine import query_rag, generate_related_questions
 import time
+import nltk # Make sure nltk is imported at the top
+from nltk.tokenize import sent_tokenize
+from thefuzz import fuzz
 
 # --- App State Management ---
 def initialize_state():
@@ -9,6 +12,37 @@ def initialize_state():
         st.session_state.response = None
     if 'related_questions' not in st.session_state:
         st.session_state.related_questions = []
+
+# --- Text Processing and Highlighting ---
+def highlight_text(source_text, generated_answer, threshold=85):
+    """Highlights sentences in source_text that are similar to sentences in generated_answer."""
+    # --- NEW ROBUST DOWNLOAD ---
+    # Ensure the 'punkt' tokenizer data is available before using it.
+    try:
+        nltk.data.find('tokenizers/punkt')
+    except LookupError:
+        nltk.download('punkt')
+    # --- END NEW SECTION ---
+
+    source_sentences = sent_tokenize(source_text)
+    answer_sentences = sent_tokenize(generated_answer)
+    
+    highlighted_sentences = set()
+
+    for a_sent in answer_sentences:
+        for s_sent in source_sentences:
+            if fuzz.token_set_ratio(a_sent, s_sent) > threshold:
+                highlighted_sentences.add(s_sent)
+
+    final_text = ""
+    for s_sent in source_sentences:
+        if s_sent in highlighted_sentences:
+            final_text += f"<mark style='background-color: yellow;'>{s_sent}</mark> "
+        else:
+            final_text += f"{s_sent} "
+            
+    return final_text.strip()
+
 
 # --- UI Rendering Functions ---
 def display_header():
@@ -29,7 +63,6 @@ def display_response_area():
     st.subheader("Answer:")
     st.write(response_data["answer"])
 
-    # --- LIVE RELATED QUESTIONS ---
     if st.session_state.related_questions:
         with st.expander("Explore Related Concepts"):
             for q in st.session_state.related_questions:
@@ -66,38 +99,7 @@ def handle_query(query):
     with st.spinner("Generating related questions..."):
         st.session_state.related_questions = generate_related_questions(query, answer)
 
-from nltk.tokenize import sent_tokenize
-from thefuzz import fuzz
-def highlight_text(source_text, generated_answer, threshold=85):
-    source_sentences = sent_tokenize(source_text)
-    answer_sentences = sent_tokenize(generated_answer)
-    highlighted_sentences = set()
-    for a_sent in answer_sentences:
-        for s_sent in source_sentences:
-            if fuzz.token_set_ratio(a_sent, s_sent) > threshold:
-                highlighted_sentences.add(s_sent)
-    final_text = ""
-    for s_sent in source_sentences:
-        if s_sent in highlighted_sentences:
-            final_text += f"<mark style='background-color: yellow;'>{s_sent}</mark> "
-        else:
-            final_text += f"{s_sent} "
-    return final_text.strip()
-
 # --- Main Application Execution ---
-import nltk
-# --- MODIFIED SECTION ---
-try:
-    # Check if the tokenizer data is available
-    nltk.data.find('tokenizers/punkt')
-except LookupError: # Use the correct, modern exception
-    # If not available, download it
-    print("NLTK 'punkt' tokenizer not found. Downloading...")
-    nltk.download('punkt')
-    print("Download complete.")
-# --- END MODIFIED SECTION ---
-
-
 st.set_page_config(page_title="The Neural Intelligence Lab")
 initialize_state()
 display_header()
