@@ -52,9 +52,17 @@ def display_header():
     st.write("Example: *How does memory in an AI compare to a human brain?*")
 
 def display_response_area():
+    """Displays the generated answer, sources, related questions, and feedback."""
     response_data = st.session_state.response
+    
     st.subheader("Answer:")
     st.write(response_data["answer"])
+
+    # --- ADD THIS DEBUG BLOCK HERE ---
+    st.subheader("--- DEBUG INFO ---")
+    st.write("Below is the raw 'sources' object returned by the RAG engine:")
+    st.write(response_data["sources"])
+    # --- END DEBUGGING ---
 
     if st.session_state.related_questions:
         with st.expander("Explore Related Concepts"):
