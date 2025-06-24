@@ -56,6 +56,21 @@ def highlight_text(source_text, generated_answer, threshold=0.70):
 
 
 # --- UI Rendering Functions (Cosmetic Changes Only) ---
+def render_related_questions(questions: list[str], cols_per_row: int = 3):
+    """
+    Display the list of related‑question buttons in a responsive horizontal grid.
+    Returns the question that was clicked, or None if no button was pressed.
+    """
+    clicked = None
+    for start in range(0, len(questions), cols_per_row):
+        cols = st.columns(cols_per_row)
+        for idx, q in enumerate(questions[start:start + cols_per_row]):
+            with cols[idx]:
+                if st.button(q, use_container_width=True, key=f"related_q_{q}"):
+                    clicked = q
+    st.write("")  # small spacer below the grid
+    return clicked
+
 def display_header():
     st.title("The Neural Intelligence Lab")
     st.write(
@@ -80,10 +95,13 @@ def display_response_area():
     # THIS SECTION IS IDENTICAL TO YOUR ORIGINAL CODE
     if st.session_state.related_questions:
         with st.expander("Explore Related Concepts", expanded=True):
-            for q in st.session_state.related_questions:
-                if st.button(q, key=f"related_q_{q}"):
-                    st.session_state.user_query = q
-                    st.rerun()
+            selected_q = render_related_questions(
+                st.session_state.related_questions,
+                cols_per_row=3
+            )
+            if selected_q:
+                st.session_state.user_query = selected_q
+                st.rerun()
 
     st.markdown("---")
     # Changed to subheader
@@ -152,4 +170,3 @@ if st.session_state.user_query:
 
 if st.session_state.response:
     display_response_area()
-
