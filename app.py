@@ -218,8 +218,18 @@ def render_response_area() -> None:
     else:
         st.write("Was this answer helpful? (Your feedback is not saved).")
         col_yes, col_no, _ = st.columns([1, 1, 5])
-        col_yes.button("Yes", use_container_width=True, on_click=set_feedback)
-        col_no.button("No", use_container_width=True, on_click=set_feedback)
+        col_yes.button(
+            "Yes",
+            key="feedback_yes",
+            use_container_width=True,
+            on_click=set_feedback,
+        )
+        col_no.button(
+            "No",
+            key="feedback_no",
+            use_container_width=True,
+            on_click=set_feedback,
+        )
 
 
 # ────────────────────────────────  Main flow  ────────────────────────────────
