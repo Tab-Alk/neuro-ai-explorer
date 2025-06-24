@@ -58,14 +58,31 @@ def highlight_text(source_text: str, generated_answer: str, threshold: float = 0
 
 
 # ─────────────────────────  Core RAG / LLM pipeline  ──────────────────────────
+# ─────────────────────────  Core RAG / LLM pipeline  ──────────────────────────
 def handle_query(query: str) -> None:
     # Reset feedback state for each new query
     st.session_state.feedback_given = False
+    
+    # --- NEW, MORE ROBUST API KEY HANDLING ---
+    # This block will find the key on your local machine and in the live app
+    import os
+    from dotenv import load_dotenv
+
+    api_key = None
     try:
+        # First, try to get the key from Streamlit's secrets (for deployed app)
         api_key = st.secrets["GROQ_API_KEY"]
-    except KeyError:
-        st.error("GROQ_API_KEY missing from Streamlit secrets.")
+    except (KeyError, FileNotFoundError):
+        # If that fails, try to load it from the local .env file
+        print("Streamlit secrets not found. Loading from .env file.")
+        load_dotenv()
+        api_key = os.getenv("GROQ_API_KEY")
+            
+    # If after all that, the key is still missing, stop.
+    if not api_key:
+        st.error("API Key is missing. Please create a .env file with GROQ_API_KEY or set Streamlit secrets.")
         return
+    # --- END OF NEW KEY HANDLING ---
 
     with st.spinner("Synthesizing answer…"):
         answer, sources = query_rag(query, api_key=api_key)
@@ -80,7 +97,6 @@ def handle_query(query: str) -> None:
             query, answer, api_key=api_key
         )
 
-
 # ───────────────────────────────  UI builders  ────────────────────────────────
 def render_header() -> None:
     """Title + one-line explainer, centred."""
@@ -90,7 +106,7 @@ def render_header() -> None:
             The Neural Intelligence Lab
         </h1>
         <p style='text-align:center;font-size:1.25rem;color:#6e6e73;margin-top:8px'>
-            Compare how biological brains and artificial intelligence actually work. 
+            Compare how brains and artificial intelligence actually work. 
             Ask questions about neurons, neural networks, learning, memory, or 
             decision‑making. Get answers that explore both worlds of intelligence.
         </p>
@@ -216,7 +232,7 @@ def render_response_area() -> None:
     if st.session_state.feedback_given:
         st.success("Thank you for your feedback!")
     else:
-        st.write("Was this answer helpful? (Your feedback is not saved).")
+        st.write("Was this answer helpful?")
         col_yes, col_no, _ = st.columns([1, 1, 5])
         col_yes.button(
             "Yes",

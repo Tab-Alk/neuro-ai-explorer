@@ -12,3 +12,4 @@ thefuzz
 python-Levenshtein
 jq
 ragas
+freeze
