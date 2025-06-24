@@ -17,19 +17,54 @@ def sent_tokenize_regex(text: str) -> list[str]:
     return [s.strip() for s in sentences if s.strip()]
 
 def highlight_text(source_text, generated_answer, threshold=85):
+    """Highlights sentences in source_text that are similar to sentences in generated_answer."""
+    # --- START DEBUGGING BLOCK ---
+    # We will write debug info into a list of strings and display it.
+    debug_info = []
+    # --- END DEBUGGING BLOCK ---
+
     source_sentences = sent_tokenize_regex(source_text)
     answer_sentences = sent_tokenize_regex(generated_answer)
+    
     highlighted_sentences = set()
-    for a_sent in answer_sentences:
+
+    for i, a_sent in enumerate(answer_sentences):
+        # --- DEBUGGING ---
+        debug_info.append(f"\nComparing Answer Sentence {i+1}: '{a_sent}'")
+        
+        # Find the best match for this answer sentence
+        best_match_score = 0
+        best_match_sent = ""
+
         for s_sent in source_sentences:
-            if fuzz.token_set_ratio(a_sent, s_sent) > threshold:
-                highlighted_sentences.add(s_sent)
+            similarity = fuzz.token_set_ratio(a_sent, s_sent)
+            
+            if similarity > best_match_score:
+                best_match_score = similarity
+                best_match_sent = s_sent
+
+        # --- DEBUGGING ---
+        debug_info.append(f"  - Best source match (Score: {best_match_score}): '{best_match_sent}'")
+
+        if best_match_score > threshold:
+            highlighted_sentences.add(best_match_sent)
+            # --- DEBUGGING ---
+            debug_info.append(f"  -  ✅ MATCH FOUND! (Score > {threshold})")
+
+    # --- DEBUGGING ---
+    # Display the entire debug log in an expander
+    with st.expander("Show Highlighting Debug Info"):
+        st.write(debug_info)
+    # --- END DEBUGGING BLOCK ---
+
+    # Reconstruct the text with highlighting
     final_text = ""
     for s_sent in source_sentences:
         if s_sent in highlighted_sentences:
             final_text += f"<mark style='background-color: yellow;'>{s_sent}</mark> "
         else:
             final_text += f"{s_sent} "
+            
     return final_text.strip()
 
 # --- UI Rendering Functions ---
