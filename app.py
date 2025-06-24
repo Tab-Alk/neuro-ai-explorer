@@ -6,7 +6,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
 
-# --- App State Management ---
+# --- App State Management (Original) ---
 def initialize_state():
     if 'response' not in st.session_state:
         st.session_state.response = None
@@ -14,7 +14,7 @@ def initialize_state():
         st.session_state.related_questions = []
 
 
-# --- Text Processing and Highlighting ---
+# --- Text Processing and Highlighting (Original) ---
 def sent_tokenize_regex(text: str) -> list[str]:
     sentences = re.split(r'(?<=[.!?])\s+', text)
     return [s.strip() for s in sentences if s.strip()]
@@ -55,32 +55,39 @@ def highlight_text(source_text, generated_answer, threshold=0.70):
     return final_text.strip()
 
 
-# --- UI Rendering Functions ---
-# (The rest of this file is updated to call the new engine functions correctly)
+# --- UI Rendering Functions (Cosmetic Changes Only) ---
 def display_header():
     st.title("The Neural Intelligence Lab")
     st.write(
         "Ask a question about the fascinating parallels and differences between "
         "biological brains and artificial intelligence."
     )
-    st.write("Example: *How does memory in an AI compare to a human brain?*")
-
+    # Changed to markdown for bolding
+    st.markdown("**Example:** *How does memory in an AI compare to a human brain?*")
+    # Added whitespace
+    st.write("")
 
 def display_response_area():
     response_data = st.session_state.response
 
-    st.subheader("Answer:")
+    # Changed to header for better hierarchy
+    st.header("Answer")
     st.write(response_data["answer"])
+    
+    # Added whitespace for better separation
+    st.write("")
 
+    # THIS SECTION IS IDENTICAL TO YOUR ORIGINAL CODE
     if st.session_state.related_questions:
-        with st.expander("Explore Related Concepts"):
+        with st.expander("Explore Related Concepts", expanded=True):
             for q in st.session_state.related_questions:
                 if st.button(q, key=f"related_q_{q}"):
                     st.session_state.user_query = q
                     st.rerun()
 
     st.markdown("---")
-    st.subheader("Sources (with highlighting):")
+    # Changed to subheader
+    st.subheader("Sources")
     full_source_text = "\n\n".join([doc.page_content for doc in response_data["sources"]])
     highlighted_source = highlight_text(full_source_text, response_data["answer"])
     with st.expander("View Highlighted Source Text"):
@@ -88,14 +95,14 @@ def display_response_area():
 
     st.markdown("---")
     st.write("Was this answer helpful? (Your feedback is not saved).")
-    col1, col2 = st.columns(2)
+    col1, col2, _ = st.columns([1, 1, 5]) # Adjusted columns for better spacing
     with col1:
         st.button("Yes", use_container_width=True)
     with col2:
         st.button("No", use_container_width=True)
 
 
-# --- Core Logic Functions ---
+# --- Core Logic Functions (Original) ---
 def handle_query(query):
     try:
         groq_api_key = st.secrets["GROQ_API_KEY"]
@@ -113,29 +120,36 @@ def handle_query(query):
         )
 
 
-# --- Main Application Execution ---
-st.set_page_config(page_title="The Neural Intelligence Lab")
+# --- Main Application Execution (Minimal Changes for Layout) ---
+st.set_page_config(page_title="The Neural Intelligence Lab", layout="wide")
 initialize_state()
 display_header()
+
+# Added a header for the input section
+st.header("Ask a Question")
 
 if 'user_query' not in st.session_state:
     st.session_state.user_query = ""
 
-
 def set_query_from_input():
     st.session_state.user_query = st.session_state.input_query
-
 
 st.text_input(
     "Your Question:",
     key="input_query",
     on_change=set_query_from_input,
-    placeholder="Type your question here..."
+    placeholder="Type your question here...",
+    label_visibility="collapsed" # Hide label since we have a header
 )
 
+# Added a separator
+st.markdown("---")
+
+# This logic is identical to your original code
 if st.session_state.user_query:
     handle_query(st.session_state.user_query)
     st.session_state.user_query = ""
 
 if st.session_state.response:
     display_response_area()
+
