@@ -180,7 +180,7 @@ def render_response_area() -> None:
     resp = st.session_state.response
     st.markdown(
         "<h3 style='text-align:center;color:#1D1D1F;margin-bottom:12px;"
-        "font-size:1.6rem;font-weight:700'>Answer</h3>",
+        "font-size:1.8rem;font-weight:700'>Answer</h3>",
         unsafe_allow_html=True,
     )
     st.write(resp["answer"])
