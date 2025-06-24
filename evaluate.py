@@ -17,32 +17,12 @@ load_dotenv()
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from core_engine import query_rag
-from langchain_groq import ChatGroq
+from langchain_openai import ChatOpenAI
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain.callbacks.base import BaseCallbackHandler
-from threading import Lock
 
 from ragas import evaluate
 from ragas.metrics import faithfulness, answer_relevancy, context_recall, context_precision
 from datasets import Dataset
-
-# --- Hard rate‑limited wrapper around ChatGroq (enforces delay in the call itself) ---
-class RateLimitedChatGroq(ChatGroq):
-    _global_lock = Lock()
-    _last_call = 0.0
-
-    def __init__(self, *args, min_delay: float = 3.5, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.min_delay = min_delay
-
-    def _generate(self, *args, **kwargs):
-        with self._global_lock:
-            elapsed = time.time() - self._last_call
-            if elapsed < self.min_delay:
-                time.sleep(self.min_delay - elapsed)
-            result = super()._generate(*args, **kwargs)
-            RateLimitedChatGroq._last_call = time.time()
-            return result
 
 def load_test_set(filepath="evaluation/gold_standard_test_set.json"):
     logging.info("Loading test set...")
@@ -77,7 +57,6 @@ def main():
                 "ground_truth": test_case['ground_truth_answer'],
                 "ground_truth_context": test_case['ground_truth_context']
             })
-            time.sleep(30) 
         except Exception as e:
             logging.error(f"ERROR processing case {i+1}: {e}")
 
@@ -87,12 +66,12 @@ def main():
 
     dataset = Dataset.from_list(rows)
     
-    ragas_llm = RateLimitedChatGroq(
+    ragas_llm = ChatOpenAI(
         temperature=0,
         model_name="llama3-8b-8192",
-        api_key=groq_key,
+        openai_api_base="https://api.groq.com/openai/v1",
+        openai_api_key=groq_key,
         timeout=300,
-        min_delay=60.0,   # enforce 60‑second spacing globally
     )
     ragas_embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
