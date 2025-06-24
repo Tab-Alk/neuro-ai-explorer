@@ -63,7 +63,7 @@ def highlight_text(source_text, generated_answer, threshold=0.70):
             
     return final_text.strip()
 
-# --- Core Logic Functions (UPDATED) ---
+# --- Core Logic Functions (No changes from original) ---
 def handle_query(query):
     """Handles the query submission and RAG retrieval."""
     try:
@@ -72,28 +72,28 @@ def handle_query(query):
         st.error("GROQ_API_KEY not found in Streamlit secrets. Please add it to continue.")
         return
 
-    # Clear previous response
     st.session_state.response = None
     
     with st.spinner("Synthesizing answer..."):
         answer, sources = query_rag(query, api_key=groq_api_key)
-        # Store the new response
         st.session_state.response = { "query": query, "answer": answer, "sources": sources }
 
 
-# --- UI Rendering Functions (REFACTORED FOR NEW QUESTION FLOW) ---
+# --- UI Rendering Functions (REFACTORED FOR TYPOGRAPHY) ---
 def render_header():
     """Renders the main title and introductory text of the app."""
     with st.container():
         st.title("The Neural Intelligence Lab")
         st.write("Ask a question about the fascinating parallels and differences between biological brains and artificial intelligence.")
-        # Use the first guided question as the new example
-        st.write(f"Example: *{GUIDED_QUESTIONS[0]}*")
-        st.write("") # Strategic whitespace
+        # Use markdown for bold emphasis on "Example:"
+        st.markdown(f"**Example:** *{GUIDED_QUESTIONS[0]}*")
+        st.write("") 
 
 def render_input_area():
-    """Renders the user input text box."""
+    """Renders the user input text box under a clear header."""
     with st.container():
+        # Add a major section header
+        st.header("Ask a Question")
         def set_query_from_input():
             st.session_state.user_query = st.session_state.input_query
 
@@ -101,22 +101,23 @@ def render_input_area():
             "Your Question:", 
             key="input_query",
             on_change=set_query_from_input,
-            placeholder="Type your question here and press Enter..."
+            placeholder="Type your question here and press Enter...",
+            label_visibility="collapsed" # Hide label as header is now used
         )
 
 def render_guided_tour():
     """Renders the curated list of guided questions as buttons."""
     with st.container():
         st.write("")
-        st.subheader("Or, take a guided tour:")
+        # Use a clear subheader for this section
+        st.subheader("Explore Key Concepts")
         
-        # Use columns for a cleaner, more organized button layout
         cols = st.columns(2) 
         for i, q in enumerate(GUIDED_QUESTIONS):
             with cols[i % 2]:
                 if st.button(q, key=f"guided_q_{q}", use_container_width=True):
-                    st.session_state.input_query = q # Pre-fill the input box
-                    st.session_state.user_query = q # Set query to be processed
+                    st.session_state.input_query = q 
+                    st.session_state.user_query = q 
                     st.rerun()
 
 def render_response_area():
@@ -124,25 +125,25 @@ def render_response_area():
     response_data = st.session_state.response
     
     with st.container():
-        st.write("") # Whitespace for separation
-        st.subheader("Answer")
+        st.write("") 
+        # Use a major header for the main output
+        st.header("Answer")
         st.write(response_data["answer"])
         
         st.markdown("---")
         
-        # Display sources in a collapsible expander
+        # Use a subheader for the sources section
         st.subheader("Sources")
         full_source_text = "\n\n".join([doc.page_content for doc in response_data["sources"]])
         highlighted_source = highlight_text(full_source_text, response_data["answer"])
         with st.expander("View Highlighted Source Text"):
             st.markdown(highlighted_source, unsafe_allow_html=True)
             
-        st.write("") # Whitespace
+        st.write("") 
         st.markdown("---")
 
-        # Display feedback section
         st.write("Was this answer helpful? (Your feedback is not saved).")
-        col1, col2, _ = st.columns([1, 1, 5]) # Use columns to control button width
+        col1, col2, _ = st.columns([1, 1, 5])
         with col1:
             st.button("Yes", use_container_width=True)
         with col2:
@@ -152,21 +153,17 @@ def render_response_area():
 # --- Main Application Execution ---
 initialize_state()
 
-# Render the static UI components
 render_header()
 render_input_area()
 
-# Render the guided tour questions if no query has been made yet
 if not st.session_state.response:
     render_guided_tour()
 
-# Check if a new query has been submitted
 if st.session_state.user_query:
     query_to_process = st.session_state.user_query
     st.session_state.user_query = "" 
     handle_query(query_to_process)
 
-# Render the response area if a response exists in the session state
 if st.session_state.response:
     render_response_area()
 
