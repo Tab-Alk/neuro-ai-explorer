@@ -63,10 +63,32 @@ def query_rag(query_text: str, api_key: str):
     source_docs = retriever.invoke(query_text)
     return response, source_docs
 
+# --- THIS IS THE FIXED FUNCTION ---
 def generate_related_questions(query: str, answer: str, api_key: str):
+    """
+    Generates relevant follow-up questions based on the query and answer.
+    This version uses a more robust prompt and parsing method.
+    """
+    # 1. Use a complete and explicit prompt to guide the LLM's output format.
     prompt_template_str = """
-    Based on the following user query and the provided answer, please generate 3 to 5 follow-up questions...
-    (rest of template is the same)
+    You are a helpful AI assistant. Your task is to generate insightful follow-up questions based on a user's query and the answer they received.
+
+    Analyze the provided query and answer. Brainstorm 3 to 5 relevant questions that would allow a user to explore the topic further. The questions should be distinct from the original query and encourage deeper investigation into related concepts.
+
+    IMPORTANT: Your output MUST be ONLY a numbered list of the questions, with each question on a new line. Do not include any introductory text, concluding remarks, or any other text besides the questions themselves.
+
+    EXAMPLE OUTPUT:
+    1. What are the ethical implications of Hebbian learning in autonomous AI?
+    2. How is synaptic plasticity modeled in modern neural networks?
+    3. Can an AI without Hebbian-style learning ever achieve true generalization?
+
+    ---
+    USER QUERY: {query}
+    ---
+    ANSWER PROVIDED: {answer}
+    ---
+    
+    YOUR GENERATED FOLLOW-UP QUESTIONS (numbered list only):
     """
     prompt = ChatPromptTemplate.from_template(prompt_template_str)
     
@@ -74,5 +96,18 @@ def generate_related_questions(query: str, answer: str, api_key: str):
     
     question_generation_chain = prompt | llm | StrOutputParser()
     response_text = question_generation_chain.invoke({"query": query, "answer": answer})
-    questions = re.findall(r'^\d+\.\s*(.*)', response_text, re.MULTILINE)
+    
+    # 2. Use a more robust parsing method that is less sensitive to formatting errors.
+    questions = []
+    # Split the response by newlines
+    potential_questions = response_text.strip().split('\n')
+    for line in potential_questions:
+        # Strip leading/trailing whitespace
+        clean_line = line.strip()
+        # Use regex to remove leading numbers, periods, and spaces (e.g., "1. ", "2. ", etc.)
+        question_text = re.sub(r'^\d+\.\s*', '', clean_line)
+        # Add to the list only if the line is not empty after cleaning
+        if question_text:
+            questions.append(question_text)
+            
     return questions
