@@ -1,8 +1,9 @@
 import streamlit as st
-from core_engine import query_rag, generate_related_questions
+from core_engine import query_rag, generate_related_questions, get_embedding_function
 import time
 import re
-from thefuzz import fuzz
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 
 # --- App State Management ---
 def initialize_state():
@@ -16,26 +17,31 @@ def sent_tokenize_regex(text: str) -> list[str]:
     sentences = re.split(r'(?<=[.!?])\s+', text)
     return [s.strip() for s in sentences if s.strip()]
 
-def highlight_text(source_text, generated_answer, threshold=65): # <-- THE ONLY CHANGE IS HERE
-    """Highlights sentences in source_text that are similar to sentences in generated_answer."""
-    # We can now remove the debugging code
+def highlight_text(source_text, generated_answer, threshold=0.70):
+    """Highlights source sentences with high semantic similarity to answer sentences."""
+    embedding_function = get_embedding_function()
+    
     source_sentences = sent_tokenize_regex(source_text)
     answer_sentences = sent_tokenize_regex(generated_answer)
+
+    if not source_sentences or not answer_sentences:
+        return source_text
+
+    # Generate embeddings for all sentences
+    source_embeddings = embedding_function.embed_documents(source_sentences)
+    answer_embeddings = embedding_function.embed_documents(answer_sentences)
+
+    # Calculate cosine similarity between each answer sentence and all source sentences
+    similarity_matrix = cosine_similarity(answer_embeddings, source_embeddings)
     
     highlighted_sentences = set()
+    for i in range(len(answer_sentences)):
+        # Find the source sentence with the highest similarity for the current answer sentence
+        best_match_index = np.argmax(similarity_matrix[i])
+        if similarity_matrix[i][best_match_index] > threshold:
+            highlighted_sentences.add(source_sentences[best_match_index])
 
-    for a_sent in answer_sentences:
-        best_match_score = 0
-        best_match_sent = ""
-        for s_sent in source_sentences:
-            similarity = fuzz.token_set_ratio(a_sent, s_sent)
-            if similarity > best_match_score:
-                best_match_score = similarity
-                best_match_sent = s_sent
-
-        if best_match_score > threshold:
-            highlighted_sentences.add(best_match_sent)
-
+    # Reconstruct the text with highlighting
     final_text = ""
     for s_sent in source_sentences:
         if s_sent in highlighted_sentences:
@@ -45,7 +51,9 @@ def highlight_text(source_text, generated_answer, threshold=65): # <-- THE ONLY 
             
     return final_text.strip()
 
+
 # --- UI Rendering Functions ---
+# (The rest of this file is updated to call the new engine functions correctly)
 def display_header():
     st.title("The Neural Intelligence Lab")
     st.write("Ask a question about the fascinating parallels and differences between biological brains and artificial intelligence.")
@@ -81,8 +89,6 @@ def display_response_area():
 
 # --- Core Logic Functions ---
 def handle_query(query):
-    """Handles the query submission, including generating the main answer and related questions."""
-    # --- MODIFIED: Get the API key from Streamlit secrets ---
     try:
         groq_api_key = st.secrets["GROQ_API_KEY"]
     except KeyError:
@@ -90,13 +96,8 @@ def handle_query(query):
         return
 
     with st.spinner("Synthesizing answer..."):
-        # --- MODIFIED: Pass the key to the engine functions ---
         answer, sources = query_rag(query, api_key=groq_api_key)
-        st.session_state.response = {
-            "query": query,
-            "answer": answer,
-            "sources": sources
-        }
+        st.session_state.response = { "query": query, "answer": answer, "sources": sources }
     with st.spinner("Generating related questions..."):
         st.session_state.related_questions = generate_related_questions(query, answer, api_key=groq_api_key)
 

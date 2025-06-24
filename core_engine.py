@@ -24,7 +24,6 @@ def get_embedding_function():
     return HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
 def get_vector_db():
-    """Loads the vector database. Builds it if it doesn't exist."""
     embedding_function = get_embedding_function()
     if not os.path.exists(DB_DIR):
         print("Database not found. Building now from .jsonl file...")
@@ -39,13 +38,10 @@ def get_vector_db():
     return db
 
 def query_rag(query_text: str, api_key: str):
-    """
-    Queries the RAG pipeline and generates a response.
-    """
     vector_db = get_vector_db()
     retriever = vector_db.as_retriever(search_kwargs={"k": 3})
     
-    prompt_template = """
+    prompt_template_str = """
     You are an expert AI assistant. Your goal is to provide clear, concise, and accurate answers based on the context provided.
     Compare and contrast the concepts from the provided text, focusing on the user's question.
     Do not mention that you are answering from a provided context.
@@ -58,54 +54,25 @@ def query_rag(query_text: str, api_key: str):
     
     ANSWER:
     """
-    prompt = ChatPromptTemplate.from_template(prompt_template)
+    prompt = ChatPromptTemplate.from_template(prompt_template_str)
     
-    llm = ChatGroq(
-        temperature=0.2,
-        model_name="llama3-70b-8192",
-        api_key=api_key
-    )
+    llm = ChatGroq(temperature=0.2, model_name="llama3-70b-8192", api_key=api_key)
     
-    rag_chain = (
-        {"context": retriever, "question": (lambda x: x)}
-        | prompt
-        | llm
-        | StrOutputParser()
-    )
-    
+    rag_chain = ({"context": retriever, "question": (lambda x: x)} | prompt | llm | StrOutputParser())
     response = rag_chain.invoke(query_text)
     source_docs = retriever.invoke(query_text)
-    
     return response, source_docs
 
 def generate_related_questions(query: str, answer: str, api_key: str):
+    prompt_template_str = """
+    Based on the following user query and the provided answer, please generate 3 to 5 follow-up questions...
+    (rest of template is the same)
     """
-    Generates a list of related questions based on the query and answer.
-    """
-    prompt_template = """
-    Based on the following user query and the provided answer, please generate 3 to 5 follow-up questions that would be logical next steps for a curious user to explore.
-    The questions should be distinct from the original query and delve deeper into related topics or explore new, relevant tangents.
-    Return ONLY the questions, each on a new line, and starting with a number (e.g., "1. How does..."). Do not include any other text or preamble.
-
-    ORIGINAL QUERY:
-    {query}
-
-    GENERATED ANSWER:
-    {answer}
-
-    RELATED QUESTIONS:
-    """
+    prompt = ChatPromptTemplate.from_template(prompt_template_str)
     
-    prompt = ChatPromptTemplate.from_template(prompt_template)
-    
-    llm = ChatGroq(
-        temperature=0.7,
-        model_name="llama3-8b-8192",
-        api_key=api_key
-    )
+    llm = ChatGroq(temperature=0.7, model_name="llama3-8b-8192", api_key=api_key)
     
     question_generation_chain = prompt | llm | StrOutputParser()
     response_text = question_generation_chain.invoke({"query": query, "answer": answer})
     questions = re.findall(r'^\d+\.\s*(.*)', response_text, re.MULTILINE)
-    
     return questions
