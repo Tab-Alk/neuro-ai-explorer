@@ -103,6 +103,9 @@ def render_response_area():
         st.header("Answer")
         st.write(response_data["answer"])
 
+        # ADD THIS LINE FOR DEBUGGING
+        st.write("DEBUGGING - Contents of related_questions:", st.session_state.related_questions)
+
         # This is the original, preserved related questions logic
         if st.session_state.related_questions:
             st.write("")
