@@ -21,6 +21,8 @@ def initialize_state() -> None:
         st.session_state.user_query = ""
     if "feedback_given" not in st.session_state:
         st.session_state.feedback_given = False
+    if "active_starter" not in st.session_state:
+        st.session_state.active_starter = ""
 
 
 # ─────────────────────────────  Helper functions  ─────────────────────────────
@@ -58,31 +60,22 @@ def highlight_text(source_text: str, generated_answer: str, threshold: float = 0
 
 
 # ─────────────────────────  Core RAG / LLM pipeline  ──────────────────────────
-# ─────────────────────────  Core RAG / LLM pipeline  ──────────────────────────
-def handle_query(query: str) -> None:
-    # Reset feedback state for each new query
+def handle_query(query: str, from_starter: bool = False) -> None:
     st.session_state.feedback_given = False
-    
-    # --- NEW, MORE ROBUST API KEY HANDLING ---
-    # This block will find the key on your local machine and in the live app
+    st.session_state.active_starter = query if from_starter else ""
+
     import os
     from dotenv import load_dotenv
-
+    load_dotenv()
     api_key = None
     try:
-        # First, try to get the key from Streamlit's secrets (for deployed app)
         api_key = st.secrets["GROQ_API_KEY"]
     except (KeyError, FileNotFoundError):
-        # If that fails, try to load it from the local .env file
-        print("Streamlit secrets not found. Loading from .env file.")
-        load_dotenv()
         api_key = os.getenv("GROQ_API_KEY")
-            
-    # If after all that, the key is still missing, stop.
+
     if not api_key:
         st.error("API Key is missing. Please create a .env file with GROQ_API_KEY or set Streamlit secrets.")
         return
-    # --- END OF NEW KEY HANDLING ---
 
     with st.spinner("Synthesizing answer…"):
         answer, sources = query_rag(query, api_key=api_key)
@@ -117,61 +110,64 @@ def render_header() -> None:
 
 
 def render_apple_style_input_area() -> None:
-    """Three grey starter-question pills + centred search bar."""
     STARTER_QUESTIONS = [
         "Why can deep learning excel at pattern recognition yet still struggle with the common‑sense reasoning that comes naturally to humans?",
         "How does the brain consolidate memories during sleep, and how could replay‑style mechanisms inspire more robust continual‑learning in AI?",
         "What lessons from human attention can help us design faster, energy‑efficient AI models that run directly on edge devices?",
     ]
 
-    # CSS for Apple-grey pills (#F5F5F7) and larger search bar
     st.markdown(
         """
         <style>
-        /* starter-question pills */
-        .pill-row > div[data-testid="stButton"] > button{
-            background:#F5F5F7 !important;
-            border:1px solid #D0D0D0;
+        .pill-btn, .pill-btn-active {
             border-radius:16px;
             padding:24px 28px;
             font:600 1.1rem -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-            color:#1D1D1F;
             width:100%;
             height:100%;
             transition:.2s;
+            cursor:pointer;
         }
-        .pill-row > div[data-testid="stButton"] > button:hover{
-            border-color:#007aff;color:#007aff;
+        .pill-btn {
+            background:#F5F5F7 !important;
+            border:1px solid #D0D0D0;
+            color:#1D1D1F;
         }
-
-        /* wider taller search bar */
+        .pill-btn:hover {
+            border-color:#007aff;
+            color:#007aff;
+        }
+        .pill-btn-active {
+            background:#F5F5F7 !important;
+            border:1.5px solid #007aff;
+            color:#007aff;
+        }
         input[data-testid="stTextInput"]{
             font-size:1.2rem;
             padding:22px 24px !important;
             height:72px !important;
             border-radius:12px !important;
-            width:100% !important;           /* max width */
+            width:100% !important;
         }
         </style>
         """,
         unsafe_allow_html=True,
     )
 
-    # Use the full‑width container (no outer columns)
     with st.container():
-        # ——— three-wide pill grid ———
         cols = st.columns([1, 1, 1], gap="small")
         for i, q in enumerate(STARTER_QUESTIONS):
             with cols[i]:
-                st.markdown('<div class="pill-row">', unsafe_allow_html=True)
+                is_active = q == st.session_state.active_starter
+                button_class = "pill-btn-active" if is_active else "pill-btn"
+                st.markdown(f'<div class="{button_class}">', unsafe_allow_html=True)
                 if st.button(q, key=f"starter_{i}"):
                     st.session_state.user_query = q
-                    st.rerun()
+                    handle_query(q, from_starter=True)
+                    return
                 st.markdown("</div>", unsafe_allow_html=True)
 
-        st.write("")  # spacer
-
-        # ——— centred label ———
+        st.write("")
         st.markdown(
             "<h4 style='text-align:center;color:#1D1D1F;margin-bottom:16px;"
             "font-size:2rem;font-weight:700'>"
@@ -179,12 +175,9 @@ def render_apple_style_input_area() -> None:
             unsafe_allow_html=True,
         )
 
-        # ——— full‑width search bar ———
         with st.container():
-
             def set_query_from_input():
-                st.session_state.user_query = st.session_state.input_query
-
+                st.session_state.user_query = st.session_state.input_query.strip()
             st.text_input(
                 "Ask your question",
                 key="input_query",
@@ -220,7 +213,7 @@ def render_response_area() -> None:
     st.markdown("---")
     st.subheader("Sources")
     full_text = "\n\n".join(doc.page_content for doc in resp["sources"])
-    with st.expander("View Highlighted Source Text"):
+    with st.expander("View Retrieved Context"):
         st.markdown(highlight_text(full_text, resp["answer"]), unsafe_allow_html=True)
 
     st.markdown("---")
@@ -253,8 +246,8 @@ initialize_state()
 render_header()
 render_apple_style_input_area()
 
-if st.session_state.user_query:
-    handle_query(st.session_state.user_query)
+if st.session_state.user_query and st.session_state.user_query != st.session_state.active_starter:
+    handle_query(st.session_state.user_query, from_starter=False)
     st.session_state.user_query = ""
 
 if st.session_state.response:
