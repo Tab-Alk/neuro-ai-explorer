@@ -1,0 +1,142 @@
+[
+  {
+    "question": "Is an artificial neural network a real 'brain' in a computer?",
+    "ground_truth_answer": "No, but it's inspired by the brain. Think of it as a simplified mathematical model. While a real brain has billions of incredibly complex, living neurons communicating with electricity and chemicals, an ANN uses simple computational \"neurons\" organized in layers to process information. It's a powerful but much simpler imitation.",
+    "ground_truth_context": [
+      "Artificial Neural Networks (ANNs) are computational models that draw inspiration from the structure and function of biological neural networks found in the brain. However, they are highly simplified mathematical abstractions. A biological brain is composed of billions of complex, living neurons that process information through electrochemical signals. In contrast, an ANN consists of interconnected nodes, often referred to as 'neurons', organized into layers, which perform mathematical operations to transform input data. They are powerful tools for pattern recognition and machine learning but do not possess the biological complexity, subjective experience, or full cognitive capabilities of a biological brain."
+    ]
+  },
+  {
+    "question": "What's the difference between a neuron's axon and its dendrites?",
+    "ground_truth_answer": "Think of a neuron like a tiny postal worker. The dendrites are the \"mailboxes\" that receive letters (signals) from many other neurons. The axon is the \"delivery truck\" that takes the neuron's own letter (its output signal) and delivers it to the next set of mailboxes.",
+    "ground_truth_context": [
+      "A typical neuron is composed of three main parts: the cell body (soma), dendrites, and an axon. Dendrites are tree-like extensions that protrude from the neuron cell body and are specialized to receive incoming electrical and chemical signals from other neurons. They act as the primary receptive regions of the neuron. The axon is a single, long projection that extends from the cell body and is responsible for transmitting the neuron's output signals (action potentials) away from the cell body to other neurons, muscles, or glands. This unidirectional flow of information from dendrites to axon is fundamental to neural communication."
+    ]
+  },
+  {
+    "question": "Why does it take so much data to train an AI, but a child can learn what a cat is from seeing just one?",
+    "ground_truth_answer": "This is one of the biggest differences! Humans learn with incredible data efficiency because our brains are pre-wired by evolution with a lot of built-in understanding about the world (e.g., objects, physics). AI models start from a blank slate and must learn everything from scratch by finding statistical patterns in millions of examples. We learn from context and prior knowledge; AI learns from raw data.",
+    "ground_truth_context": [
+      "Human learning demonstrates remarkable data efficiency, a stark contrast to many current AI models. This efficiency stems from the brain's innate predispositions, a product of evolutionary development, which includes built-in capacities for understanding concepts like object permanence, causality, and basic physics. Children leverage this prior knowledge and contextual cues to generalize from very few examples. Conversely, most AI models, especially deep learning architectures, begin as 'tabula rasa' systems. They require vast quantities of data to statistically infer patterns, features, and relationships from scratch, making them highly data-hungry compared to biological learners."
+    ]
+  },
+  {
+    "question": "What is neuroplasticity?",
+    "ground_truth_answer": "It's the brain's superpower! Neuroplasticity is the ability of your brain to physically change and rewire itself based on your experiences. Every time you learn a new skill, form a memory, or even recover from a brain injury, it's neuroplasticity at work, strengthening or creating new connections between neurons.",
+    "ground_truth_context": [
+      "Neuroplasticity, also known as brain plasticity, refers to the brain's remarkable ability to reorganize itself throughout an individual's life. This involves physical changes to its structure and functional organization in response to new experiences, learning, environmental stimuli, or even injury. It is the fundamental mechanism underlying learning, memory formation, and recovery from brain damage, allowing neural pathways and synapses to strengthen or weaken, and new connections to form or disappear."
+    ]
+  },
+  {
+    "question": "How did watching cats on a screen lead to the AI in my phone's camera?",
+    "ground_truth_answer": "It's a direct line! In the 1960s, scientists Hubel and Wiesel discovered that neurons in a cat's visual cortex respond to simple features like lines and edges. This idea of building up complex vision from simple features inspired the architecture of Convolutional Neural Networks (CNNs), which are the type of AI that powers almost all modern image recognition, including your phone's camera.",
+    "ground_truth_context": [
+      "The architecture of Convolutional Neural Networks (CNNs), which are pervasive in modern image recognition, has direct roots in neuroscientific discoveries from the 1960s. David Hubel and Torsten Wiesel's pioneering research on the visual cortex of cats revealed that individual neurons in the primary visual cortex respond selectively to specific basic visual stimuli, such as lines and edges at particular orientations. This hierarchical processing, building complex perceptions from simple features, profoundly influenced the design of CNNs, leading to their success in tasks like object detection and image classification used in smartphone cameras and other vision systems."
+    ]
+  },
+  {
+    "question": "What is a 'deepfake,' and how does it relate to how our brains see faces?",
+    "ground_truth_answer": "A deepfake is a video or image created by an AI that has learned to recognize the patterns of a person's face and voice. It can then generate new, realistic footage of that person saying or doing things they never did. It relates to our brain's own powerful, but sometimes fallible, facial recognition system. Both AI and our brains are excellent at recognizing facial patterns, but AI can be used to create fakes that are convincing enough to fool our natural detection abilities.",
+    "ground_truth_context": [
+      "Deepfakes are synthetic media generated using deep learning techniques, typically Generative Adversarial Networks (GANs), to create highly realistic images, audio, or videos of individuals saying or doing things they never did. The human brain possesses specialized neural circuits, like the fusiform face area, that are remarkably adept at recognizing and processing faces, a crucial social skill. Deepfake technology leverages AI's capacity to learn and replicate intricate facial and vocal patterns, mirroring how our brains encode these features. This allows deepfakes to produce convincing forgeries that can exploit the strengths and occasional vulnerabilities of our natural facial recognition system, making them difficult to distinguish from genuine media."
+    ]
+  },
+  {
+    "question": "Why does my laptop get hot running AI, while my brain stays cool?",
+    "ground_truth_answer": "This is the energy efficiency gap. Your brain is a marvel of biological engineering, performing incredible computations on about 20 watts of power. A powerful computer training an AI model can use tens of thousands of watts. This is because our brains use a completely different, massively parallel and event-driven \"wetware\" that is far more efficient than the silicon chips in computers.",
+    "ground_truth_context": [
+      "The stark difference in heat generation between AI computations on a laptop and brain activity is fundamentally an energy efficiency gap. The human brain is an incredibly efficient biological computer, operating on approximately 20 watts of power to perform complex cognitive functions. In contrast, modern AI training, especially for large models, requires powerful computer hardware (like GPUs) that can consume kilowatts of electricity, generating significant heat. This disparity arises because biological brains utilize a massively parallel, analog, and event-driven electrochemical 'wetware' architecture, which is inherently more energy-efficient than the digital, transistor-based silicon chips used in conventional computers."
+    ]
+  },
+  {
+    "question": "Can AI \"read my mind\"?",
+    "ground_truth_answer": "Not in the science-fiction sense of reading your silent thoughts. However, in a field called Brain-Computer Interfaces (BCIs), AI is getting very good at decoding brain signals related to intended speech or movement. By analyzing EEG or fMRI data, AI can translate the brain activity for \"typing a sentence\" into the actual text. It's revolutionary for medicine, but raises major privacy questions.",
+    "ground_truth_context": [
+      "While AI does not possess the capability to 'read thoughts' in a telepathic or invasive sense, advancements in Brain-Computer Interfaces (BCIs) are enabling AI to decode specific neural signals associated with intended actions or communications. Researchers use techniques like electroencephalography (EEG) or functional magnetic resonance imaging (fMRI) to record brain activity. AI algorithms then learn to interpret patterns in this data that correspond to a person's intention to move a limb or articulate words, translating these signals into control commands for prosthetics or text output. This technology has profound implications for medical applications and assistive devices, but also brings forward critical discussions around privacy and the ethical use of decoded brain data."
+    ]
+  },
+  {
+    "question": "What is \"catastrophic forgetting\" in AI?",
+    "ground_truth_answer": "It's a major weakness of many current AI systems. Imagine teaching an AI to play chess perfectly, and then teaching it to play checkers. Catastrophic forgetting is when, in the process of learning checkers, the AI completely erases its knowledge of chess. Unlike humans, who can learn new things without overwriting old skills, AI often struggles to retain past knowledge when learning sequentially.",
+    "ground_truth_context": [
+      "Catastrophic forgetting, also known as catastrophic interference, is a significant limitation observed in many artificial neural networks when they are trained sequentially on new tasks. This phenomenon describes the tendency of an AI model to completely or largely forget previously acquired knowledge or skills upon learning new information. Unlike biological brains, which are adept at integrating new learning while retaining old, AI models can experience a severe degradation of performance on prior tasks when adapting to new ones. This challenge is a key area of research in continual learning, aiming to develop AI systems that can accumulate knowledge over time without overwriting past memories."
+    ]
+  },
+  {
+    "question": "Is AI bias the same as human prejudice?",
+    "ground_truth_answer": "Not exactly, but they are deeply linked. Human prejudice is a conscious or unconscious bias. AI bias occurs when a model learns from data that contains human biases. For example, if an AI is trained on historical hiring data where women were underrepresented in leadership roles, it will learn that pattern and may discriminate against female applicants. The AI isn't \"prejudiced,\" but it is perpetuating and even amplifying human societal biases encoded in its data.",
+    "ground_truth_context": [
+      "While both AI bias and human prejudice can lead to unfair outcomes, their nature differs. Human prejudice is rooted in conscious or unconscious attitudes, beliefs, and stereotypes held by individuals. AI bias, conversely, is a systemic error or deviation in an AI system's output that leads to discriminatory results. This bias often arises when the AI model is trained on datasets that reflect existing societal prejudices, historical inequalities, or skewed representations. The AI itself does not possess prejudice in the human sense; rather, it learns and propagates patterns, including problematic ones, that are embedded within its training data, thus reflecting and sometimes amplifying human biases."
+    ]
+  },
+  {
+    "question": "What is a \"loss function\"?",
+    "ground_truth_answer": "It's the AI's \"teacher\" or \"critic.\" During training, after the AI makes a prediction, the loss function calculates a score that measures how wrong that prediction was. A big score means a big mistake. The entire goal of training is for the AI to adjust its internal \"weights\" to make that loss score as low as possible.",
+    "ground_truth_context": [
+      "In machine learning, a loss function (also called a cost function or error function) is a mathematical function that quantifies the difference between the predicted output of an AI model and the true, desired output. During the training phase of a neural network, for each prediction the model makes, the loss function computes a numerical 'penalty' or 'loss' value, indicating how inaccurate that prediction was. The central objective of the training process is to continuously adjust the model's internal parameters (weights and biases) in a way that minimizes this calculated loss, thereby improving the model's accuracy and performance over time."
+    ]
+  },
+  {
+    "question": "What is \"backpropagation\"?",
+    "ground_truth_answer": "It's how an AI learns from its mistakes. After the \"loss function\" calculates how wrong a prediction was, backpropagation is the algorithm that goes backward through the neural network and figures out which connections (weights) were most responsible for the error. It then makes tiny adjustments to those weights so the network will do a little better next time. Repeat that millions of times, and the AI learns!.",
+    "ground_truth_context": [
+      "Backpropagation is a key algorithm used to train artificial neural networks, enabling them to learn from errors. After a network processes an input and generates an output, a 'loss function' calculates the difference between the network's prediction and the correct answer (the error). Backpropagation then efficiently computes the 'gradient' of this loss with respect to each weight in the network, essentially determining how much each connection contributed to the error. This information is propagated backward through the network, allowing an optimization algorithm (like gradient descent) to incrementally adjust the weights to reduce the error for future predictions. This iterative process, repeated over many training examples, allows the network to learn and refine its performance."
+    ]
+  },
+  {
+    "question": "What is neuromorphic computing?",
+    "ground_truth_answer": "It's the future of brain-inspired hardware. Instead of just running brain-inspired software on normal computer chips, neuromorphic computing aims to build new kinds of chips that physically mimic the brain's low-power, parallel architecture. The goal is to create computers that are vastly more energy-efficient and better at learning in real-time.",
+    "ground_truth_context": [
+      "Neuromorphic computing is an innovative approach to computer hardware design that seeks to mimic the highly efficient, parallel, and event-driven architecture of the human brain. Unlike traditional Von Neumann computing, which separates processing and memory units, neuromorphic chips integrate these functions, much like neurons and synapses. The goal is to develop new types of processors that can perform complex computations with significantly lower power consumption and enable real-time learning and adaptation, moving beyond simply running brain-inspired algorithms on conventional silicon."
+    ]
+  },
+  {
+    "question": "Could an AI ever become conscious?",
+    "ground_truth_answer": "This is one of the biggest and most debated questions. Most neuroscientists and AI researchers say no, not with current technology. They argue that human consciousness arises from complex biological processes, embodiment, and evolutionary history that AI lacks. An AI can mimic conscious behavior, like conversation, but it doesn't have subjective experience or self-awareness. It's a sophisticated pattern-matcher, not a thinking, feeling being.",
+    "ground_truth_context": [
+      "The question of whether AI can achieve consciousness remains a profound and unresolved philosophical and scientific debate. The dominant view among many neuroscientists and AI researchers is that current AI systems are not conscious. Human consciousness is believed to emerge from complex biological, embodied, and evolutionary processes involving subjective experience, self-awareness, and rich interactions with the world—qualities that current AI, fundamentally based on algorithms and data processing, lacks. While advanced AI can simulate human-like conversation and behavior, this is generally seen as sophisticated pattern matching and prediction rather than genuine subjective experience or sentience."
+    ]
+  },
+  {
+    "question": "What is the hippocampus and why is it important for memory?",
+    "ground_truth_answer": "The hippocampus is a seahorse-shaped structure deep in your brain that acts as your memory's \"save button.\" It's crucial for forming new memories about events and facts (episodic and declarative memory) and for converting those from fragile, short-term memories into stable, long-term ones that are stored elsewhere in the brain, like the neocortex.",
+    "ground_truth_context": [
+      "The hippocampus is a critical brain structure, shaped like a seahorse, located deep within the medial temporal lobe. It plays a central role in the formation of new long-term memories, particularly explicit memories such as episodic memories (recollections of specific events) and declarative memories (facts and knowledge). It acts as a temporary processing center that helps consolidate fragile short-term memories into more stable, long-term memories, which are then thought to be stored in other cortical regions, such as the neocortex. Damage to the hippocampus typically results in a profound inability to form new memories (anterograde amnesia)."
+    ]
+  },
+  {
+    "question": "What is Hebbian Learning?",
+    "ground_truth_answer": "It's a famous neuroscience principle often summarized as \"neurons that fire together, wire together.\" It means that if two neurons are active at the same time, the connection between them gets stronger. This simple rule is believed to be a fundamental way the brain learns and forms associations.",
+    "ground_truth_context": [
+      "Hebbian learning is a fundamental principle in neuroscience proposed by Donald Hebb, often famously summarized as 'neurons that fire together, wire together.' This principle posits that when the activity of two neurons is correlated (i.e., they fire synchronously or one consistently activates the other), the strength of the synaptic connection between them is increased. This strengthening of connections, or synaptic plasticity, is considered a basic mechanism by which the brain learns, forms associations, and encodes memories at a cellular and network level."
+    ]
+  },
+  {
+    "question": "Will AI replace neuroscientists?",
+    "ground_truth_answer": "It's much more likely to be a powerful collaborator. AI is becoming an indispensable tool for neuroscientists, helping them analyze the incredibly complex and massive datasets that come from brain imaging and other recording techniques. AI can find patterns that humans would miss, accelerating discovery. The future is one of partnership, not replacement.",
+    "ground_truth_context": [
+      "Rather than replacing neuroscientists, Artificial Intelligence is increasingly becoming a powerful and indispensable tool in neuroscience research. Neuroscientists generate vast and complex datasets from brain imaging (e.g., fMRI, EEG), genetic studies, and neural recordings. AI algorithms are uniquely suited to process, analyze, and extract meaningful patterns from these large datasets, identifying correlations and structures that might be imperceptible to human analysis. AI can aid in tasks like segmenting brain structures, decoding neural activity, predicting disease progression, and even accelerating drug discovery. Thus, AI is seen as a force for augmentation and acceleration in neuroscience, fostering a collaborative future."
+    ]
+  },
+  {
+    "question": "What is the difference between AI, Machine Learning, and Deep Learning?",
+    "ground_truth_answer": "Think of them as Russian nesting dolls. Artificial Intelligence (AI) is the biggest doll, the broad idea of making machines smart. Machine Learning (ML) is a smaller doll inside; it's a type of AI that learns from data. Deep Learning (DL) is the smallest doll inside ML; it's a type of machine learning that uses very large, multi-layered \"deep\" neural networks to learn from huge amounts of data.",
+    "ground_truth_context": [
+      "The terms Artificial Intelligence (AI), Machine Learning (ML), and Deep Learning (DL) represent increasingly specific subsets of technologies. AI is the broadest concept, referring to any intelligence exhibited by machines, encompassing everything from rule-based systems to advanced cognitive abilities. Machine Learning is a subset of AI that focuses on developing algorithms that allow systems to learn from data without being explicitly programmed. Deep Learning is a specialized subset of Machine Learning that employs artificial neural networks with multiple (or 'deep') layers, enabling them to learn complex patterns and representations from vast amounts of data, often achieving state-of-the-art performance in areas like image and speech recognition."
+    ]
+  },
+  {
+    "question": "What are glial cells, and do AIs have them?",
+    "ground_truth_answer": "Glial cells are the unsung heroes of the brain. They outnumber neurons and provide critical support, including delivering nutrients, cleaning up waste, and modulating the signals between neurons. Most AI models have no equivalent to this complex support system; they operate in a purely computational environment.",
+    "ground_truth_context": [
+      "Glial cells (or neuroglia) are non-neuronal cells in the nervous system that provide vital support and protection for neurons, outnumbering them significantly. Their diverse functions include providing structural support, supplying nutrients, maintaining metabolic homeostasis, removing waste products, forming myelin (which insulates axons and speeds signal transmission), and modulating synaptic activity. In stark contrast, most contemporary AI models, particularly artificial neural networks, are purely computational constructs. They consist of abstract nodes and connections, lacking any direct analogs to the complex, biologically integrated support, maintenance, and modulatory roles performed by glial cells in a living brain. AI operates in an idealized, abstract computational domain."
+    ]
+  },
+  {
+    "question": "What is Artificial General Intelligence (AGI)?",
+    "ground_truth_answer": "AGI is the long-term, so-far-hypothetical goal of AI research. Unlike current \"narrow\" AI that can only do specific tasks (like play chess or recognize faces), an AGI would have the flexible, adaptable, common-sense intelligence of a human, able to learn and reason about any task. Many believe that insights from neuroscience are key to ever achieving it.",
+    "ground_truth_context": [
+      "Artificial General Intelligence (AGI) is a theoretical form of AI that would possess intelligence comparable to that of a human being, with the ability to understand, learn, and apply knowledge across a wide range of intellectual tasks, rather than being limited to a specific domain (like current 'narrow AI'). AGI would exhibit cognitive capabilities such as common-sense reasoning, problem-solving across diverse areas, learning from minimal data, creativity, and adaptability. It remains a long-term goal of AI research, and many researchers believe that a deeper understanding and replication of principles from neuroscience will be crucial for its eventual development."
+    ]
+  }
+]

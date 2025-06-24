@@ -1,11 +1,12 @@
-# --- PATCH FOR STREAMLIT DEPLOYMENT ---
-import sys
-__import__('pysqlite3')
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-# --- END PATCH ---
+# (The conditional patch for pysqlite3 at the top remains)
+try:
+    __import__('pysqlite3')
+    import sys
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except ModuleNotFoundError:
+    pass
 
 import os
-import streamlit as st
 import re
 from langchain_community.document_loaders import JSONLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -15,44 +16,32 @@ from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
-# Define the paths
 KNOWLEDGE_BASE_DIR = 'knowledge_base'
 DB_DIR = 'db'
 
-# --- Functions for building/loading the RAG pipeline ---
+def get_embedding_function():
+    """Gets the embedding function."""
+    return HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
 def get_vector_db():
     """Loads the vector database. Builds it if it doesn't exist."""
-    embedding_function = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    embedding_function = get_embedding_function()
     if not os.path.exists(DB_DIR):
         print("Database not found. Building now from .jsonl file...")
-        
         file_path = os.path.join(KNOWLEDGE_BASE_DIR, 'neural_lab_kb.jsonl')
-
-        # --- FINAL, CORRECTED JSONLoader CONFIGURATION ---
-        loader = JSONLoader(
-            file_path=file_path,
-            jq_schema='.',          # Load the entire JSON object from each line
-            content_key="text",     # The key in your file is "text", not "content"
-            json_lines=True         
-        )
-        # --- END CORRECTION ---
-        
+        loader = JSONLoader(file_path=file_path, jq_schema='.', content_key="text", json_lines=True)
         documents = loader.load()
-        text_chunks = documents 
-
-        db = Chroma.from_documents(
-            text_chunks, embedding_function, persist_directory=DB_DIR
-        )
+        text_chunks = documents
+        db = Chroma.from_documents(text_chunks, embedding_function, persist_directory=DB_DIR)
         print("Vector database setup complete.")
     else:
         db = Chroma(persist_directory=DB_DIR, embedding_function=embedding_function)
     return db
 
-# (The rest of the file remains the same)
-# --- Function for the RAG chain ---
-
-def query_rag(query_text: str):
+def query_rag(query_text: str, api_key: str):
+    """
+    Queries the RAG pipeline and generates a response.
+    """
     vector_db = get_vector_db()
     retriever = vector_db.as_retriever(search_kwargs={"k": 3})
     
@@ -70,10 +59,11 @@ def query_rag(query_text: str):
     ANSWER:
     """
     prompt = ChatPromptTemplate.from_template(prompt_template)
+    
     llm = ChatGroq(
         temperature=0.2,
         model_name="llama3-70b-8192",
-        api_key=st.secrets["GROQ_API_KEY"]
+        api_key=api_key
     )
     
     rag_chain = (
@@ -88,9 +78,10 @@ def query_rag(query_text: str):
     
     return response, source_docs
 
-# --- Function for Related Questions ---
-
-def generate_related_questions(query: str, answer: str):
+def generate_related_questions(query: str, answer: str, api_key: str):
+    """
+    Generates a list of related questions based on the query and answer.
+    """
     prompt_template = """
     Based on the following user query and the provided answer, please generate 3 to 5 follow-up questions that would be logical next steps for a curious user to explore.
     The questions should be distinct from the original query and delve deeper into related topics or explore new, relevant tangents.
@@ -106,10 +97,11 @@ def generate_related_questions(query: str, answer: str):
     """
     
     prompt = ChatPromptTemplate.from_template(prompt_template)
+    
     llm = ChatGroq(
         temperature=0.7,
         model_name="llama3-8b-8192",
-        api_key=st.secrets["GROQ_API_KEY"]
+        api_key=api_key
     )
     
     question_generation_chain = prompt | llm | StrOutputParser()

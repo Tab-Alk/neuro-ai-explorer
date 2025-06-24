@@ -1,0 +1,30 @@
+--- RAG System Evaluation Report ---
+
+--- Average Scores ---
+faithfulness: 0.0000
+answer_relevancy: 0.0000
+context_precision: 0.0000
+context_recall: 0.0000
+
+--- Detailed Results per Question ---
+                                                                                                   question  faithfulness  answer_relevancy  context_precision  context_recall                                                       error
+0                                             Is an artificial neural network a real 'brain' in a computer?             0                 0                  0               0  'EvaluationResult' object does not support item assignment
+1                                          What's the difference between a neuron's axon and its dendrites?             0                 0                  0               0  'EvaluationResult' object does not support item assignment
+2   Why does it take so much data to train an AI, but a child can learn what a cat is from seeing just one?             0                 0                  0               0  'EvaluationResult' object does not support item assignment
+3                                                                                  What is neuroplasticity?             0                 0                  0               0  'EvaluationResult' object does not support item assignment
+4                                    How did watching cats on a screen lead to the AI in my phone's camera?             0                 0                  0               0  'EvaluationResult' object does not support item assignment
+5                                 What is a 'deepfake,' and how does it relate to how our brains see faces?             0                 0                  0               0  'EvaluationResult' object does not support item assignment
+6                                         Why does my laptop get hot running AI, while my brain stays cool?             0                 0                  0               0  'EvaluationResult' object does not support item assignment
+7                                                                                    Can AI "read my mind"?             0                 0                  0               0  'EvaluationResult' object does not support item assignment
+8                                                                  What is "catastrophic forgetting" in AI?             0                 0                  0               0  'EvaluationResult' object does not support item assignment
+9                                                                   Is AI bias the same as human prejudice?             0                 0                  0               0  'EvaluationResult' object does not support item assignment
+10                                                                               What is a "loss function"?             0                 0                  0               0  'EvaluationResult' object does not support item assignment
+11                                                                               What is "backpropagation"?             0                 0                  0               0  'EvaluationResult' object does not support item assignment
+12                                                                          What is neuromorphic computing?             0                 0                  0               0  'EvaluationResult' object does not support item assignment
+13                                                                       Could an AI ever become conscious?             0                 0                  0               0  'EvaluationResult' object does not support item assignment
+14                                              What is the hippocampus and why is it important for memory?             0                 0                  0               0  'EvaluationResult' object does not support item assignment
+15                                                                                What is Hebbian Learning?             0                 0                  0               0  'EvaluationResult' object does not support item assignment
+16                                                                         Will AI replace neuroscientists?             0                 0                  0               0  'EvaluationResult' object does not support item assignment
+17                                  What is the difference between AI, Machine Learning, and Deep Learning?             0                 0                  0               0  'EvaluationResult' object does not support item assignment
+18                                                              What are glial cells, and do AIs have them?             0                 0                  0               0  'EvaluationResult' object does not support item assignment
+19                                                           What is Artificial General Intelligence (AGI)?             0                 0                  0               0  'EvaluationResult' object does not support item assignment

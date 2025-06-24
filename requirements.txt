@@ -11,3 +11,4 @@ langchain-groq
 thefuzz
 python-Levenshtein
 jq
+ragas
