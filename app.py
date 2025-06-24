@@ -19,6 +19,8 @@ def initialize_state() -> None:
         st.session_state.related_questions = []
     if "user_query" not in st.session_state:
         st.session_state.user_query = ""
+    if "feedback_given" not in st.session_state:
+        st.session_state.feedback_given = False
 
 
 # ─────────────────────────────  Helper functions  ─────────────────────────────
@@ -57,6 +59,8 @@ def highlight_text(source_text: str, generated_answer: str, threshold: float = 0
 
 # ─────────────────────────  Core RAG / LLM pipeline  ──────────────────────────
 def handle_query(query: str) -> None:
+    # Reset feedback state for each new query
+    st.session_state.feedback_given = False
     try:
         api_key = st.secrets["GROQ_API_KEY"]
     except KeyError:
@@ -175,17 +179,20 @@ def render_apple_style_input_area() -> None:
 
 
 def render_response_area() -> None:
-    """Answer, sources, and feedback block."""
+    """Answer, sources, and feedback block with one‑time feedback buttons."""
     st.markdown("---")
     resp = st.session_state.response
+
+    # Answer heading
     st.markdown(
         "<h3 style='text-align:center;color:#1D1D1F;margin-bottom:12px;"
-        "font-size:2rem;font-weight:700'>Answer</h3>",
+        "font-size:1.6rem;font-weight:700'>Answer</h3>",
         unsafe_allow_html=True,
     )
     st.write(resp["answer"])
     st.write("")
 
+    # Related concepts expander (collapsed by default)
     if st.session_state.related_questions:
         with st.expander("Explore Related Concepts", expanded=False):
             for q in st.session_state.related_questions:
@@ -193,6 +200,7 @@ def render_response_area() -> None:
                     st.session_state.user_query = q
                     st.rerun()
 
+    # Sources section
     st.markdown("---")
     st.subheader("Sources")
     full_text = "\n\n".join(doc.page_content for doc in resp["sources"])
@@ -200,10 +208,18 @@ def render_response_area() -> None:
         st.markdown(highlight_text(full_text, resp["answer"]), unsafe_allow_html=True)
 
     st.markdown("---")
-    st.write("Was this answer helpful? (Your feedback is not saved).")
-    yes, no, _ = st.columns([1, 1, 5])
-    yes.button("Yes", use_container_width=True)
-    no.button("No", use_container_width=True)
+
+    # ------------- Feedback logic -------------
+    def set_feedback():
+        st.session_state.feedback_given = True
+
+    if st.session_state.feedback_given:
+        st.success("Thank you for your feedback!")
+    else:
+        st.write("Was this answer helpful? (Your feedback is not saved).")
+        col_yes, col_no, _ = st.columns([1, 1, 5])
+        col_yes.button("Yes", use_container_width=True, on_click=set_feedback)
+        col_no.button("No", use_container_width=True, on_click=set_feedback)
 
 
 # ────────────────────────────────  Main flow  ────────────────────────────────
