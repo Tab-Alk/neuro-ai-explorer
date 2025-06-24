@@ -110,7 +110,7 @@ def render_apple_style_input_area() -> None:
         <style>
         /* starter-question pills */
         .pill-row > div[data-testid="stButton"] > button{
-            background:#F5F5F7;
+            background:#F5F5F7 !important;
             border:1px solid #D0D0D0;
             border-radius:16px;
             padding:24px 28px;
@@ -140,7 +140,7 @@ def render_apple_style_input_area() -> None:
     # Use the full‑width container (no outer columns)
     with st.container():
         # ——— three-wide pill grid ———
-        cols = st.columns([1, 1, 1], gap="large")
+        cols = st.columns([1, 1, 1], gap="small")
         for i, q in enumerate(STARTER_QUESTIONS):
             with cols[i]:
                 st.markdown('<div class="pill-row">', unsafe_allow_html=True)
@@ -153,8 +153,8 @@ def render_apple_style_input_area() -> None:
 
         # ——— centred label ———
         st.markdown(
-            "<h4 style='text-align:center;color:#6e6e73;margin-bottom:14px;"
-            "font-size:1.5rem;font-weight:700'>"
+            "<h4 style='text-align:center;color:#1D1D1F;margin-bottom:14px;"
+            "font-size:1.8rem;font-weight:700'>"
             "Ask another question</h4>",
             unsafe_allow_html=True,
         )
