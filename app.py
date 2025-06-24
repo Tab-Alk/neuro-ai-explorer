@@ -111,12 +111,13 @@ def render_apple_style_input_area() -> None:
         /* starter-question pills */
         .pill-row > div[data-testid="stButton"] > button{
             background:#F5F5F7;
-            border:1px solid #E0E0E0;
+            border:1px solid #D0D0D0;
             border-radius:16px;
-            padding:18px 26px;                      /* bigger */
-            min-width:240px;                        /* ensure width */
-            font:600 1.05rem -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+            padding:24px 28px;
+            font:600 1.1rem -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
             color:#1D1D1F;
+            width:100%;
+            height:100%;
             transition:.2s;
         }
         .pill-row > div[data-testid="stButton"] > button:hover{
@@ -136,11 +137,10 @@ def render_apple_style_input_area() -> None:
         unsafe_allow_html=True,
     )
 
-    # Centre everything inside the middle third
-    _, center, _ = st.columns([1, 2, 1])
-    with center:
+    # Use the full‑width container (no outer columns)
+    with st.container():
         # ——— three-wide pill grid ———
-        cols = st.columns(3)
+        cols = st.columns([1, 1, 1], gap="large")
         for i, q in enumerate(STARTER_QUESTIONS):
             with cols[i]:
                 st.markdown('<div class="pill-row">', unsafe_allow_html=True)
@@ -159,8 +159,8 @@ def render_apple_style_input_area() -> None:
             unsafe_allow_html=True,
         )
 
-        # ——— centred search bar ———
-        with center:   # use the same full-width container
+        # ——— full‑width search bar ———
+        with st.container():
 
             def set_query_from_input():
                 st.session_state.user_query = st.session_state.input_query
