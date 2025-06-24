@@ -85,8 +85,10 @@ def render_header() -> None:
         <h1 style='text-align:center;font-size:2.8rem;font-weight:700;margin:0'>
             The Neural Intelligence Lab
         </h1>
-        <p style='text-align:center;font-size:1.25rem;color:#6e6e73;margin-top:6px'>
-            Explore the fascinating overlap of biological brains and AI.
+        <p style='text-align:center;font-size:1.25rem;color:#6e6e73;margin-top:8px'>
+            Compare how biological brains and artificial intelligence actually work. 
+            Ask questions about neurons, neural networks, learning, memory, or 
+            decision‑making. Get answers that explore both worlds of intelligence.
         </p>
         """,
         unsafe_allow_html=True,
@@ -123,10 +125,11 @@ def render_apple_style_input_area() -> None:
 
         /* wider taller search bar */
         input[data-testid="stTextInput"]{
-            font-size:1.05rem;
-            padding:18px 20px !important;
-            height:60px !important;
+            font-size:1.2rem;
+            padding:22px 24px !important;
+            height:72px !important;
             border-radius:12px !important;
+            width:100% !important;           /* max width */
         }
         </style>
         """,
@@ -150,14 +153,14 @@ def render_apple_style_input_area() -> None:
 
         # ——— centred label ———
         st.markdown(
-            "<h4 style='text-align:center;color:#6e6e73;margin-bottom:10px;font-size:1.25rem;font-weight:600'>"
+            "<h4 style='text-align:center;color:#6e6e73;margin-bottom:14px;"
+            "font-size:1.5rem;font-weight:700'>"
             "Ask another question</h4>",
             unsafe_allow_html=True,
         )
 
         # ——— centred search bar ———
-        _, bar, _ = st.columns([1, 2, 1])
-        with bar:
+        with center:   # use the same full-width container
 
             def set_query_from_input():
                 st.session_state.user_query = st.session_state.input_query
