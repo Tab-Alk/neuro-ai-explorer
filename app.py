@@ -1,172 +1,197 @@
 import streamlit as st
-from core_engine import query_rag, generate_related_questions, get_embedding_function
-import time
+from core_engine import (
+    query_rag,
+    generate_related_questions,
+    get_embedding_function,
+)
 import re
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
+# ────────────────────────────  App configuration  ─────────────────────────────
+st.set_page_config(page_title="The Neural Intelligence Lab", layout="wide")
 
-# --- App State Management (Original) ---
-def initialize_state():
-    if 'response' not in st.session_state:
+# ─────────────────────────────  State management  ─────────────────────────────
+def initialize_state() -> None:
+    if "response" not in st.session_state:
         st.session_state.response = None
-    if 'related_questions' not in st.session_state:
+    if "related_questions" not in st.session_state:
         st.session_state.related_questions = []
+    if "user_query" not in st.session_state:
+        st.session_state.user_query = ""
 
 
-# --- Text Processing and Highlighting (Original) ---
+# ─────────────────────────────  Helper functions  ─────────────────────────────
 def sent_tokenize_regex(text: str) -> list[str]:
-    sentences = re.split(r'(?<=[.!?])\s+', text)
-    return [s.strip() for s in sentences if s.strip()]
+    """Very small sentence splitter."""
+    return [s.strip() for s in re.split(r"(?<=[.!?])\s+", text) if s.strip()]
 
 
-def highlight_text(source_text, generated_answer, threshold=0.70):
-    """Highlights source sentences with high semantic similarity to answer sentences."""
-    embedding_function = get_embedding_function()
+def highlight_text(source_text: str, generated_answer: str, threshold: float = 0.70) -> str:
+    """Highlight source sentences that closely match answer sentences."""
+    embed = get_embedding_function()
 
-    source_sentences = sent_tokenize_regex(source_text)
-    answer_sentences = sent_tokenize_regex(generated_answer)
-
-    if not source_sentences or not answer_sentences:
+    src_sents = sent_tokenize_regex(source_text)
+    ans_sents = sent_tokenize_regex(generated_answer)
+    if not src_sents or not ans_sents:
         return source_text
 
-    # Generate embeddings for all sentences
-    source_embeddings = embedding_function.embed_documents(source_sentences)
-    answer_embeddings = embedding_function.embed_documents(answer_sentences)
+    src_emb = embed.embed_documents(src_sents)
+    ans_emb = embed.embed_documents(ans_sents)
+    sim = cosine_similarity(ans_emb, src_emb)
 
-    # Calculate cosine similarity between each answer sentence and all source sentences
-    similarity_matrix = cosine_similarity(answer_embeddings, source_embeddings)
+    marked = {
+        src_sents[np.argmax(row)]
+        for row in sim
+        if row.max() > threshold
+    }
 
-    highlighted_sentences = set()
-    for i in range(len(answer_sentences)):
-        # Find the source sentence with the highest similarity for the current answer sentence
-        best_match_index = np.argmax(similarity_matrix[i])
-        if similarity_matrix[i][best_match_index] > threshold:
-            highlighted_sentences.add(source_sentences[best_match_index])
-
-    # Reconstruct the text with highlighting
-    final_text = ""
-    for s_sent in source_sentences:
-        if s_sent in highlighted_sentences:
-            final_text += f"<mark style='background-color: yellow;'>{s_sent}</mark> "
+    out = []
+    for s in src_sents:
+        if s in marked:
+            out.append(f"<mark style='background:yellow'>{s}</mark>")
         else:
-            final_text += f"{s_sent} "
-
-    return final_text.strip()
-
-
-# --- UI Rendering Functions (Cosmetic Changes Only) ---
-def render_related_questions(questions: list[str], cols_per_row: int = 3):
-    """
-    Display the list of related‑question buttons in a responsive horizontal grid.
-    Returns the question that was clicked, or None if no button was pressed.
-    """
-    clicked = None
-    for start in range(0, len(questions), cols_per_row):
-        cols = st.columns(cols_per_row)
-        for idx, q in enumerate(questions[start:start + cols_per_row]):
-            with cols[idx]:
-                if st.button(q, use_container_width=True, key=f"related_q_{q}"):
-                    clicked = q
-    st.write("")  # small spacer below the grid
-    return clicked
-
-def display_header():
-    st.title("The Neural Intelligence Lab")
-    st.write(
-        "Ask a question about the fascinating parallels and differences between "
-        "biological brains and artificial intelligence."
-    )
-    # Changed to markdown for bolding
-    st.markdown("**Example:** *How does memory in an AI compare to a human brain?*")
-    # Added whitespace
-    st.write("")
-
-def display_response_area():
-    response_data = st.session_state.response
-
-    # Changed to header for better hierarchy
-    st.header("Answer")
-    st.write(response_data["answer"])
-    
-    # Added whitespace for better separation
-    st.write("")
-
-    # THIS SECTION IS IDENTICAL TO YOUR ORIGINAL CODE
-    if st.session_state.related_questions:
-        with st.expander("Explore Related Concepts", expanded=True):
-            selected_q = render_related_questions(
-                st.session_state.related_questions,
-                cols_per_row=3
-            )
-            if selected_q:
-                st.session_state.user_query = selected_q
-                st.rerun()
-
-    st.markdown("---")
-    # Changed to subheader
-    st.subheader("Sources")
-    full_source_text = "\n\n".join([doc.page_content for doc in response_data["sources"]])
-    highlighted_source = highlight_text(full_source_text, response_data["answer"])
-    with st.expander("View Highlighted Source Text"):
-        st.markdown(highlighted_source, unsafe_allow_html=True)
-
-    st.markdown("---")
-    st.write("Was this answer helpful? (Your feedback is not saved).")
-    col1, col2, _ = st.columns([1, 1, 5]) # Adjusted columns for better spacing
-    with col1:
-        st.button("Yes", use_container_width=True)
-    with col2:
-        st.button("No", use_container_width=True)
+            out.append(s)
+    return " ".join(out)
 
 
-# --- Core Logic Functions (Original) ---
-def handle_query(query):
+# ─────────────────────────  Core RAG / LLM pipeline  ──────────────────────────
+def handle_query(query: str) -> None:
     try:
-        groq_api_key = st.secrets["GROQ_API_KEY"]
+        api_key = st.secrets["GROQ_API_KEY"]
     except KeyError:
-        st.error("GROQ_API_KEY not found in Streamlit secrets. Please add it.")
+        st.error("GROQ_API_KEY missing from Streamlit secrets.")
         return
 
-    with st.spinner("Synthesizing answer..."):
-        answer, sources = query_rag(query, api_key=groq_api_key)
-        st.session_state.response = {"query": query, "answer": answer, "sources": sources}
+    with st.spinner("Synthesizing answer…"):
+        answer, sources = query_rag(query, api_key=api_key)
+        st.session_state.response = {
+            "query": query,
+            "answer": answer,
+            "sources": sources,
+        }
 
-    with st.spinner("Generating related questions..."):
+    with st.spinner("Generating related questions…"):
         st.session_state.related_questions = generate_related_questions(
-            query, answer, api_key=groq_api_key
+            query, answer, api_key=api_key
         )
 
 
-# --- Main Application Execution (Minimal Changes for Layout) ---
-st.set_page_config(page_title="The Neural Intelligence Lab", layout="wide")
+# ───────────────────────────────  UI builders  ────────────────────────────────
+def render_header() -> None:
+    """Title + one-line explainer, centred."""
+    st.markdown(
+        """
+        <h1 style='text-align:center;font-size:2.2rem;font-weight:600;margin:0'>
+            The Neural Intelligence Lab
+        </h1>
+        <p style='text-align:center;font-size:1.1rem;color:#6e6e73;margin-top:4px'>
+            Explore the fascinating overlap of biological brains and AI.
+        </p>
+        """,
+        unsafe_allow_html=True,
+    )
+    st.write("")  # 16 px spacer
+
+
+def render_apple_style_input_area() -> None:
+    """Three grey starter-question pills + centred search bar."""
+    STARTER_QUESTIONS = [
+        "How does the brain store memories?",
+        "Why can AI 'forget' less than humans?",
+        "Is Hebbian learning similar to back-prop?",
+    ]
+
+    # CSS for Apple-grey pills (#F5F5F7)
+    st.markdown(
+        """
+        <style>
+        .pill-row > div[data-testid="stButton"] > button{
+            background:#F5F5F7;border:1px solid #E0E0E0;border-radius:16px;
+            padding:14px 20px;font:500 1rem -apple-system,BlinkMacSystemFont,
+            "Segoe UI",sans-serif;color:#1D1D1F;width:100%;height:100%;
+            transition:.2s;}
+        .pill-row > div[data-testid="stButton"] > button:hover{
+            border-color:#007aff;color:#007aff;}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # Centre everything inside the middle third
+    _, center, _ = st.columns([1, 2, 1])
+    with center:
+        # ——— three-wide pill grid ———
+        cols = st.columns(3)
+        for i, q in enumerate(STARTER_QUESTIONS):
+            with cols[i]:
+                st.markdown('<div class="pill-row">', unsafe_allow_html=True)
+                if st.button(q, key=f"starter_{i}"):
+                    st.session_state.user_query = q
+                    st.rerun()
+                st.markdown("</div>", unsafe_allow_html=True)
+
+        st.write("")  # spacer
+
+        # ——— centred label ———
+        st.markdown(
+            "<h4 style='text-align:center;color:#6e6e73;margin-bottom:8px'>"
+            "Ask another question</h4>",
+            unsafe_allow_html=True,
+        )
+
+        # ——— centred search bar ———
+        _, bar, _ = st.columns([1, 2, 1])
+        with bar:
+
+            def set_query_from_input():
+                st.session_state.user_query = st.session_state.input_query
+
+            st.text_input(
+                "Ask your question",
+                key="input_query",
+                placeholder="Type here…",
+                on_change=set_query_from_input,
+                label_visibility="collapsed",
+            )
+
+
+def render_response_area() -> None:
+    """Answer, sources, and feedback block."""
+    st.markdown("---")
+    resp = st.session_state.response
+    st.header("Answer")
+    st.write(resp["answer"])
+    st.write("")
+
+    if st.session_state.related_questions:
+        with st.expander("Explore Related Concepts", expanded=True):
+            for q in st.session_state.related_questions:
+                if st.button(q, key=f"rel_q_{q}"):
+                    st.session_state.user_query = q
+                    st.rerun()
+
+    st.markdown("---")
+    st.subheader("Sources")
+    full_text = "\n\n".join(doc.page_content for doc in resp["sources"])
+    with st.expander("View Highlighted Source Text"):
+        st.markdown(highlight_text(full_text, resp["answer"]), unsafe_allow_html=True)
+
+    st.markdown("---")
+    st.write("Was this answer helpful? (Your feedback is not saved).")
+    yes, no, _ = st.columns([1, 1, 5])
+    yes.button("Yes", use_container_width=True)
+    no.button("No", use_container_width=True)
+
+
+# ────────────────────────────────  Main flow  ────────────────────────────────
 initialize_state()
-display_header()
+render_header()
+render_apple_style_input_area()
 
-# Added a header for the input section
-st.header("Ask a Question")
-
-if 'user_query' not in st.session_state:
-    st.session_state.user_query = ""
-
-def set_query_from_input():
-    st.session_state.user_query = st.session_state.input_query
-
-st.text_input(
-    "Your Question:",
-    key="input_query",
-    on_change=set_query_from_input,
-    placeholder="Type your question here...",
-    label_visibility="collapsed" # Hide label since we have a header
-)
-
-# Added a separator
-st.markdown("---")
-
-# This logic is identical to your original code
 if st.session_state.user_query:
     handle_query(st.session_state.user_query)
     st.session_state.user_query = ""
 
 if st.session_state.response:
-    display_response_area()
+    render_response_area()
