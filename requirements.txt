@@ -1,15 +1,32 @@
+# Core LLM/RAG tools
 langchain
 langchain-community
 langchain-huggingface
+langchain-groq
+
+# Vector store + Embeddings
 chromadb
 sentence-transformers
+
+# PDF parsing and preprocessing
 pypdf
 unstructured
+
+# Streamlit frontend
 streamlit
+
+# SQLite (remove if unused)
 pysqlite3-binary
-langchain-groq
+
+# Similarity search
 thefuzz
 python-Levenshtein
 jq
+
+# Evaluation (optional)
 ragas
-freeze
+
+# Utility
+python-dotenv     
+scikit-learn      
+numpy             
