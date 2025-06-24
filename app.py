@@ -99,9 +99,9 @@ def render_header() -> None:
 def render_apple_style_input_area() -> None:
     """Three grey starter-question pills + centred search bar."""
     STARTER_QUESTIONS = [
-        "How does learning happen in brains vs. AI?",
-        "Why can deep learning handle complex data but brains still outperform in common sense?",
-        "How do neural networks in AI relate to actual neural pathways in decision‑making?",
+        "Why can deep learning excel at pattern recognition yet still struggle with the common‑sense reasoning that comes naturally to humans?",
+        "How does the brain consolidate memories during sleep, and how could replay‑style mechanisms inspire more robust continual‑learning in AI?",
+        "What lessons from human attention can help us design faster, energy‑efficient AI models that run directly on edge devices?",
     ]
 
     # CSS for Apple-grey pills (#F5F5F7) and larger search bar
@@ -153,8 +153,8 @@ def render_apple_style_input_area() -> None:
 
         # ——— centred label ———
         st.markdown(
-            "<h4 style='text-align:center;color:#1D1D1F;margin-bottom:14px;"
-            "font-size:1.8rem;font-weight:700'>"
+            "<h4 style='text-align:center;color:#1D1D1F;margin-bottom:16px;"
+            "font-size:2rem;font-weight:700'>"
             "Ask another question</h4>",
             unsafe_allow_html=True,
         )
@@ -178,12 +178,16 @@ def render_response_area() -> None:
     """Answer, sources, and feedback block."""
     st.markdown("---")
     resp = st.session_state.response
-    st.header("Answer")
+    st.markdown(
+        "<h3 style='text-align:center;color:#1D1D1F;margin-bottom:12px;"
+        "font-size:1.6rem;font-weight:700'>Answer</h3>",
+        unsafe_allow_html=True,
+    )
     st.write(resp["answer"])
     st.write("")
 
     if st.session_state.related_questions:
-        with st.expander("Explore Related Concepts", expanded=True):
+        with st.expander("Explore Related Concepts", expanded=False):
             for q in st.session_state.related_questions:
                 if st.button(q, key=f"rel_q_{q}"):
                     st.session_state.user_query = q
