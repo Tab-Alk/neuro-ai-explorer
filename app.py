@@ -82,10 +82,10 @@ def render_header() -> None:
     """Title + one-line explainer, centred."""
     st.markdown(
         """
-        <h1 style='text-align:center;font-size:2.2rem;font-weight:600;margin:0'>
+        <h1 style='text-align:center;font-size:2.8rem;font-weight:700;margin:0'>
             The Neural Intelligence Lab
         </h1>
-        <p style='text-align:center;font-size:1.1rem;color:#6e6e73;margin-top:4px'>
+        <p style='text-align:center;font-size:1.25rem;color:#6e6e73;margin-top:6px'>
             Explore the fascinating overlap of biological brains and AI.
         </p>
         """,
@@ -97,22 +97,37 @@ def render_header() -> None:
 def render_apple_style_input_area() -> None:
     """Three grey starter-question pills + centred search bar."""
     STARTER_QUESTIONS = [
-        "How does the brain store memories?",
-        "Why can AI 'forget' less than humans?",
-        "Is Hebbian learning similar to back-prop?",
+        "How does learning happen in brains vs. AI?",
+        "Why can deep learning handle complex data but brains still outperform in common sense?",
+        "How do neural networks in AI relate to actual neural pathways in decision‑making?",
     ]
 
-    # CSS for Apple-grey pills (#F5F5F7)
+    # CSS for Apple-grey pills (#F5F5F7) and larger search bar
     st.markdown(
         """
         <style>
+        /* starter-question pills */
         .pill-row > div[data-testid="stButton"] > button{
-            background:#F5F5F7;border:1px solid #E0E0E0;border-radius:16px;
-            padding:14px 20px;font:500 1rem -apple-system,BlinkMacSystemFont,
-            "Segoe UI",sans-serif;color:#1D1D1F;width:100%;height:100%;
-            transition:.2s;}
+            background:#F5F5F7;
+            border:1px solid #E0E0E0;
+            border-radius:16px;
+            padding:18px 26px;                      /* bigger */
+            min-width:240px;                        /* ensure width */
+            font:600 1.05rem -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+            color:#1D1D1F;
+            transition:.2s;
+        }
         .pill-row > div[data-testid="stButton"] > button:hover{
-            border-color:#007aff;color:#007aff;}
+            border-color:#007aff;color:#007aff;
+        }
+
+        /* wider taller search bar */
+        input[data-testid="stTextInput"]{
+            font-size:1.05rem;
+            padding:18px 20px !important;
+            height:60px !important;
+            border-radius:12px !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,
@@ -135,7 +150,7 @@ def render_apple_style_input_area() -> None:
 
         # ——— centred label ———
         st.markdown(
-            "<h4 style='text-align:center;color:#6e6e73;margin-bottom:8px'>"
+            "<h4 style='text-align:center;color:#6e6e73;margin-bottom:10px;font-size:1.25rem;font-weight:600'>"
             "Ask another question</h4>",
             unsafe_allow_html=True,
         )
