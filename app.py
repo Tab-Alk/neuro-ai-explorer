@@ -160,10 +160,12 @@ def render_apple_style_input_area() -> None:
         cols = st.columns([1, 1, 1], gap="medium")
         for i, q in enumerate(STARTER_QUESTIONS):
             with cols[i]:
-                if st.button(q, key=f"starter_{i}"):
+                button_id = f"starter_{i}"
+                if st.button(" ", key=button_id):
                     st.session_state.user_query = q
                     handle_query(q, from_starter=True)
                     st.rerun()
+                st.markdown(f"<div class='pill-btn'>{q}</div>", unsafe_allow_html=True)
 
         st.write("")
         st.markdown(
