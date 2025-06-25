@@ -121,12 +121,13 @@ def render_apple_style_input_area() -> None:
         <style>
         .pill-btn, .pill-btn-active {
             border-radius:16px;
-            padding:24px 28px;
+            padding:32px 36px;
             font:600 1.1rem -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
             width:100%;
             height:100%;
             transition:.2s;
             cursor:pointer;
+            margin-bottom: 12px;
         }
         .pill-btn {
             background:#F5F5F7 !important;
@@ -212,9 +213,7 @@ def render_response_area() -> None:
         retrieved_docs = resp.get("sources", [])
         for i, doc in enumerate(retrieved_docs):
             source_name = doc.metadata.get("source", "Unknown Source")
-            heading = "Details"
-            if 'metadata' in doc.metadata and isinstance(doc.metadata.get('metadata'), dict):
-                heading = doc.metadata['metadata'].get('heading', heading)
+            heading = doc.metadata.get("heading", "Details")
 
             st.markdown(f"**Source {i+1}: {source_name}** — *{heading}*")
             highlighted_chunk = highlight_text(doc.page_content, resp["answer"])
