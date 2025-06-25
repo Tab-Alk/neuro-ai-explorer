@@ -121,14 +121,14 @@ def render_apple_style_input_area() -> None:
         <style>
         .pill-btn, .pill-btn-active {
             border-radius:16px;
-            padding:36px 40px;
+            padding:36px 42px; /* Increased padding */
             font:600 1.1rem -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
             width:100%;
             height:100%;
             transition:.2s;
             cursor:pointer;
-            margin-bottom: 12px;
-            line-height: 1.6;
+            margin-bottom: 16px; /* Extra vertical spacing */
+            line-height: 1.5; /* Better spacing between lines */
         }
         .pill-btn {
             background:#F5F5F7 !important;
