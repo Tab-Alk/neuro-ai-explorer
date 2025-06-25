@@ -160,10 +160,14 @@ def render_apple_style_input_area() -> None:
             with cols[i]:
                 is_active = q == st.session_state.active_starter
                 button_class = "pill-btn-active" if is_active else "pill-btn"
-                if st.button(f'<span class="{button_class}">{q}</span>', key=f"starter_{i}", unsafe_allow_html=True):
+                
+                # Use a styled container div
+                st.markdown(f'<div class="{button_class}">', unsafe_allow_html=True)
+                if st.button(q, key=f"starter_{i}"):
                     st.session_state.user_query = q
                     handle_query(q, from_starter=True)
-                    return
+                    st.rerun()
+                st.markdown('</div>', unsafe_allow_html=True)
 
         st.write("")
         st.markdown(
