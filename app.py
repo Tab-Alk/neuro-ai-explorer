@@ -208,9 +208,20 @@ def render_response_area() -> None:
     # Sources section
     st.markdown("---")
     st.subheader("Sources")
-    full_text = "\n\n".join(doc.page_content for doc in resp["sources"])
     with st.expander("View Retrieved Context"):
-        st.markdown(highlight_text(full_text, resp["answer"]), unsafe_allow_html=True)
+        retrieved_docs = resp.get("sources", [])
+        for i, doc in enumerate(retrieved_docs):
+            source_name = doc.metadata.get("source", "Unknown Source")
+            heading = "Details"
+            if 'metadata' in doc.metadata and isinstance(doc.metadata.get('metadata'), dict):
+                heading = doc.metadata['metadata'].get('heading', heading)
+
+            st.markdown(f"**Source {i+1}: {source_name}** — *{heading}*")
+            highlighted_chunk = highlight_text(doc.page_content, resp["answer"])
+            st.markdown(f"> {highlighted_chunk}", unsafe_allow_html=True)
+
+            if i < len(retrieved_docs) - 1:
+                st.markdown("---")
 
     st.markdown("---")
 
