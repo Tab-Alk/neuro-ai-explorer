@@ -120,29 +120,29 @@ def render_apple_style_input_area() -> None:
         """
         <style>
         .pill-btn, .pill-btn-active {
-            border-radius:16px;
-            padding:36px 42px; /* Increased padding */
-            font:600 1.1rem -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-            width:100%;
-            height:100%;
-            transition:.2s;
-            cursor:pointer;
-            margin-bottom: 16px; /* Extra vertical spacing */
-            line-height: 1.5; /* Better spacing between lines */
+            background: #FFFFFF !important;
+            border: 1px solid #D0D0D0;
+            border-radius: 20px;
+            padding: 36px 48px;
+            font: 600 1.15rem -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: #1D1D1F;
+            text-align: center;
+            transition: 0.2s;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            margin: 16px;
         }
-        .pill-btn {
-            background:#F5F5F7 !important;
-            border:1px solid #D0D0D0;
-            color:#1D1D1F;
-        }
+
         .pill-btn:hover {
-            border-color:#007aff;
-            color:#007aff;
+            border-color: #007aff;
+            color: #007aff;
+            background: #f7f9fc !important;
         }
+
         .pill-btn-active {
-            background:#F5F5F7 !important;
-            border:1.5px solid #007aff;
-            color:#007aff;
+            border: 1.5px solid #007aff;
+            color: #007aff;
+            background: #f0f8ff !important;
         }
         input[data-testid="stTextInput"]{
             font-size:1.2rem;
@@ -157,7 +157,7 @@ def render_apple_style_input_area() -> None:
     )
 
     with st.container():
-        cols = st.columns([1, 1, 1], gap="small")
+        cols = st.columns([1, 1, 1], gap="medium")
         for i, q in enumerate(STARTER_QUESTIONS):
             with cols[i]:
                 if st.button(q, key=f"starter_{i}"):
