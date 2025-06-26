@@ -59,6 +59,30 @@ def highlight_text(source_text: str, generated_answer: str, threshold: float = 0
     return " ".join(out)
 
 
+# ─────────────────────────  Source display helper  ───────────────────────────
+def render_sources(retrieved_docs: list, answer: str) -> None:
+    """
+    Display each retrieved chunk as a neat, collapsible excerpt that
+    shows the heading (if available) or a snippet of the first sentence.
+    The chunk text is highlighted relative to the generated answer.
+    """
+    if not retrieved_docs:
+        return
+
+    for idx, doc in enumerate(retrieved_docs, start=1):
+        # Determine a human‑readable heading
+        heading = ""
+        if isinstance(doc.metadata, dict):
+            heading = doc.metadata.get("heading", "")
+        if not heading:
+            heading = doc.page_content.split(".")[0][:80] + "…"
+
+        label = f"Excerpt {idx}: {heading}"
+        with st.expander(label, expanded=False):
+            highlighted = highlight_text(doc.page_content, answer)
+            st.markdown(highlighted, unsafe_allow_html=True)
+
+
 # ─────────────────────────  Core RAG / LLM pipeline  ──────────────────────────
 def handle_query(query: str, from_starter: bool = False) -> None:
     st.session_state.feedback_given = False
@@ -212,16 +236,7 @@ def render_response_area() -> None:
     st.subheader("Sources")
     with st.expander("View Retrieved Context"):
         retrieved_docs = resp.get("sources", [])
-        for i, doc in enumerate(retrieved_docs):
-            source_name = doc.metadata.get("source", "Unknown Source")
-            heading = doc.metadata.get("heading", "Details")
-
-            st.markdown(f"**Source {i+1}: {source_name}** — *{heading}*")
-            highlighted_chunk = highlight_text(doc.page_content, resp["answer"])
-            st.markdown(f"> {highlighted_chunk}", unsafe_allow_html=True)
-
-            if i < len(retrieved_docs) - 1:
-                st.markdown("---")
+        render_sources(retrieved_docs, resp["answer"])
 
     st.markdown("---")
 
