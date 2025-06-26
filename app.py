@@ -70,17 +70,30 @@ def render_sources(retrieved_docs: list, answer: str) -> None:
         return
 
     for idx, doc in enumerate(retrieved_docs, start=1):
-        # Determine a human‑readable heading
+        # -------- Robust heading extraction --------
         heading = ""
-        if isinstance(doc.metadata, dict):
-            heading = doc.metadata.get("heading", "")
-        if not heading:
-            heading = doc.page_content.split(".")[0][:80] + "…"
 
-        label = f"Excerpt {idx}: {heading}"
-        with st.expander(label, expanded=False):
-            highlighted = highlight_text(doc.page_content, answer)
-            st.markdown(highlighted, unsafe_allow_html=True)
+        # ① LangChain / LlamaIndex Document objects
+        if hasattr(doc, "metadata") and isinstance(doc.metadata, dict):
+            heading = doc.metadata.get("heading", "")
+
+        # ② Plain dicts returned by some retrievers
+        elif isinstance(doc, dict):
+            heading = (
+                doc.get("heading", "")
+                or doc.get("metadata", {}).get("heading", "")
+            )
+
+        # ③ Fallback to first sentence of the chunk
+        if not heading:
+            text = doc.get("page_content", "") if isinstance(doc, dict) else doc.page_content
+            heading = (text.split(".")[0][:80] + "…") if text else "Untitled"
+
+        st.markdown(f"**Excerpt {idx}: {heading}**")
+        highlighted = highlight_text(doc.page_content, answer)
+        st.markdown(highlighted, unsafe_allow_html=True)
+        if idx < len(retrieved_docs):
+            st.markdown("---")
 
 
 # ─────────────────────────  Core RAG / LLM pipeline  ──────────────────────────
