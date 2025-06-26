@@ -195,8 +195,8 @@ def render_apple_style_input_area() -> None:
     st.markdown(
         """
         <style>
-        /* --- Apple‑style pill button for Streamlit native buttons --- */
-        div.stButton > button:first-child {
+        /* --- Apple‑style pill button for starter questions only --- */
+        .starter-btn div.stButton > button:first-child {
             background:#FFFFFF !important;
             border:1px solid #D0D0D0;
             border-radius:20px;
@@ -210,12 +210,12 @@ def render_apple_style_input_area() -> None:
             margin:16px;
             width:100%;
         }
-        div.stButton > button:first-child:hover{
+        .starter-btn div.stButton > button:first-child:hover{
             border-color:#007aff;
             color:#007aff;
             background:#f7f9fc !important;
         }
-        div.stButton > button:first-child:focus{
+        .starter-btn div.stButton > button:first-child:focus{
             border:1.5px solid #007aff;
             color:#007aff;
             background:#f0f8ff !important;
@@ -236,10 +236,12 @@ def render_apple_style_input_area() -> None:
         cols = st.columns([1, 1, 1], gap="medium")
         for i, q in enumerate(STARTER_QUESTIONS):
             with cols[i]:
+                st.markdown('<div class="starter-btn">', unsafe_allow_html=True)
                 if st.button(q, key=f"starter_{i}", use_container_width=True):
                     st.session_state.user_query = q
                     handle_query(q, from_starter=True)
                     st.rerun()
+                st.markdown('</div>', unsafe_allow_html=True)
 
         st.write("")
         st.markdown(
