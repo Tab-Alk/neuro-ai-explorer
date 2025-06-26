@@ -12,15 +12,15 @@ import numpy as np
 st.markdown("""
     <style>
     .feedback-btn button, .related-q-btn button {
-        padding: 6px 10px !important;
-        font-size: 0.8rem !important;
-        border-radius: 4px !important;
+        padding: 4px 8px !important;
+        font-size: 0.75rem !important;
+        border-radius: 3px !important;
         height: auto !important;
-        width: auto !important;
-        min-height: unset !important;
+        width: fit-content !important;
+        min-height: 0 !important;
         line-height: 1 !important;
         white-space: normal !important;
-        margin: 6px 0 !important;
+        margin: 4px 4px 0 0 !important;
     }
     </style>
 """, unsafe_allow_html=True)
