@@ -11,21 +11,16 @@ import numpy as np
 # ──────────────────────────────  Custom feedback/related button CSS  ──────────────────────────────
 st.markdown("""
     <style>
-    .related-q-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 8px;
-        margin-bottom: 8px;
-    }
-    .related-q-btn button {
-        padding: 6px 12px !important;
-        font-size: 0.85rem !important;
-        border-radius: 6px !important;
+    .feedback-btn button, .related-q-btn button {
+        padding: 4px 8px !important;
+        font-size: 0.75rem !important;
+        border-radius: 3px !important;
+        height: auto !important;
+        width: fit-content !important;
+        min-height: 0 !important;
+        line-height: 1 !important;
         white-space: normal !important;
-        width: auto !important;
-        max-width: 700px !important;
-        text-align: left !important;
+        margin: 4px 4px 0 0 !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -247,6 +242,20 @@ def render_apple_style_input_area() -> None:
 def render_response_area() -> None:
     """Answer, sources, and feedback block with one‑time feedback buttons."""
     st.markdown("---")
+    st.markdown("""
+        <style>
+        /* Keep starter pill style, but shrink related / feedback buttons */
+        .related-q-btn div.stButton > button:first-child,
+        .feedback-btn div.stButton > button:first-child {
+            padding: 6px 12px !important;
+            font-size: 0.85rem !important;
+            border-radius: 6px !important;
+            box-shadow: none !important;
+            margin: 6px 0 !important;
+            width: 100% !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
     resp = st.session_state.response
 
     # Answer heading
@@ -261,16 +270,12 @@ def render_response_area() -> None:
     # Related concepts expander (collapsed by default)
     if st.session_state.related_questions:
         with st.expander("Explore Related Concepts", expanded=False):
-            st.markdown('<div class="related-q-container">', unsafe_allow_html=True)
             for q in st.session_state.related_questions:
-                st.markdown(f'''
-                    <div class="related-q-btn">
-                        <form action="" method="post">
-                            <button type="submit" name="rel_q_{q}">{q}</button>
-                        </form>
-                    </div>
-                ''', unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+                st.markdown('<div class="related-q-btn">', unsafe_allow_html=True)
+                if st.button(q, key=f"rel_q_{q}", use_container_width=True):
+                    st.session_state.user_query = q
+                    st.rerun()
+                st.markdown('</div>', unsafe_allow_html=True)
 
     # Sources section
     st.markdown("---")
