@@ -8,6 +8,18 @@ import re
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
+# ──────────────────────────────  Custom feedback/related button CSS  ──────────────────────────────
+st.markdown("""
+    <style>
+    .feedback-btn button, .related-q-btn button {
+        padding: 12px 20px !important;
+        font-size: 1rem !important;
+        border-radius: 8px !important;
+        box-shadow: none !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # ────────────────────────────  App configuration  ─────────────────────────────
 st.set_page_config(page_title="The Neural Intelligence Lab", layout="wide")
 
@@ -73,18 +85,18 @@ def render_sources(retrieved_docs: list, answer: str) -> None:
         # -------- Robust heading extraction --------
         heading = ""
 
-        # ① LangChain / LlamaIndex Document objects
+        #  LangChain / LlamaIndex Document objects
         if hasattr(doc, "metadata") and isinstance(doc.metadata, dict):
             heading = doc.metadata.get("heading", "")
 
-        # ② Plain dicts returned by some retrievers
+        # Plain dicts returned by some retrievers
         elif isinstance(doc, dict):
             heading = (
                 doc.get("heading", "")
                 or doc.get("metadata", {}).get("heading", "")
             )
 
-        # ③ Fallback to first sentence of the chunk
+        #  Fallback to first sentence of the chunk
         if not heading:
             text = doc.get("page_content", "") if isinstance(doc, dict) else doc.page_content
             heading = (text.split(".")[0][:80] + "…") if text else "Untitled"
@@ -240,9 +252,11 @@ def render_response_area() -> None:
     if st.session_state.related_questions:
         with st.expander("Explore Related Concepts", expanded=False):
             for q in st.session_state.related_questions:
+                st.markdown('<div class="related-q-btn">', unsafe_allow_html=True)
                 if st.button(q, key=f"rel_q_{q}"):
                     st.session_state.user_query = q
                     st.rerun()
+                st.markdown('</div>', unsafe_allow_html=True)
 
     # Sources section
     st.markdown("---")
@@ -262,18 +276,14 @@ def render_response_area() -> None:
     else:
         st.write("Was this answer helpful?")
         col_yes, col_no, _ = st.columns([1, 1, 5])
-        col_yes.button(
-            "Yes",
-            key="feedback_yes",
-            use_container_width=True,
-            on_click=set_feedback,
-        )
-        col_no.button(
-            "No",
-            key="feedback_no",
-            use_container_width=True,
-            on_click=set_feedback,
-        )
+        with col_yes:
+            st.markdown('<div class="feedback-btn">', unsafe_allow_html=True)
+            st.button("Yes", key="feedback_yes", on_click=set_feedback)
+            st.markdown('</div>', unsafe_allow_html=True)
+        with col_no:
+            st.markdown('<div class="feedback-btn">', unsafe_allow_html=True)
+            st.button("No", key="feedback_no", on_click=set_feedback)
+            st.markdown('</div>', unsafe_allow_html=True)
 
 
 # ────────────────────────────────  Main flow  ────────────────────────────────
