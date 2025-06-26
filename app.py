@@ -99,6 +99,7 @@ def highlight_text(source_text: str, generated_answer: str, threshold: float = 0
 
 
 # ─────────────────────────  Source display helper  ───────────────────────────
+# ─────────────────────────  Source display helper  ───────────────────────────
 def render_sources(retrieved_docs: list, answer: str) -> None:
     """
     Display each retrieved chunk as a neat, collapsible excerpt that
@@ -111,26 +112,42 @@ def render_sources(retrieved_docs: list, answer: str) -> None:
     for idx, doc in enumerate(retrieved_docs, start=1):
         # -------- Robust heading extraction --------
         heading = ""
+        text = ""
 
-        #  LangChain / LlamaIndex Document objects
-        if hasattr(doc, "metadata") and isinstance(doc.metadata, dict):
-            heading = doc.metadata.get("heading", "")
-
-        # Plain dicts returned by some retrievers
+        # Handle different document formats
+        if hasattr(doc, "page_content"):
+            # LangChain Document object
+            text = doc.page_content
+            if hasattr(doc, "metadata") and isinstance(doc.metadata, dict):
+                heading = doc.metadata.get("heading", "")
         elif isinstance(doc, dict):
-            heading = (
-                doc.get("heading", "")
-                or doc.get("metadata", {}).get("heading", "")
-            )
+            # Plain dict format
+            text = doc.get("page_content", "") or doc.get("text", "")
+            metadata = doc.get("metadata", {})
+            if isinstance(metadata, dict):
+                heading = metadata.get("heading", "")
+            else:
+                # Sometimes metadata might be stored directly in the doc
+                heading = doc.get("heading", "")
 
-        #  Fallback to first sentence of the chunk
-        if not heading:
-            text = doc.get("page_content", "") if isinstance(doc, dict) else doc.page_content
-            heading = (text.split(".")[0][:80] + "…") if text else "Untitled"
+        # Fallback to first sentence if no heading found
+        if not heading and text:
+            first_sentence = text.split(".")[0][:80]
+            heading = first_sentence + "…" if len(first_sentence) == 80 else first_sentence
+        elif not heading:
+            heading = "Untitled"
 
+        # Display the source with proper heading
         st.markdown(f"**Excerpt {idx}: {heading}**")
-        highlighted = highlight_text(doc.page_content, answer)
-        st.markdown(highlighted, unsafe_allow_html=True)
+        
+        # Highlight the text relative to the answer
+        if text:
+            highlighted = highlight_text(text, answer)
+            st.markdown(highlighted, unsafe_allow_html=True)
+        else:
+            st.markdown("*No content available*")
+            
+        # Add separator between sources (except for the last one)
         if idx < len(retrieved_docs):
             st.markdown("---")
 
