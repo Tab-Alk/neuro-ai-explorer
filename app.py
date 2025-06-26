@@ -13,12 +13,12 @@ st.markdown("""
     <style>
     .feedback-btn button, .related-q-btn button {
         padding: 6px 10px !important;
-        font-size: 0.85rem !important;
+        font-size: 0.8rem !important;
         border-radius: 4px !important;
         height: auto !important;
         width: auto !important;
         min-height: unset !important;
-        line-height: 1.1 !important;
+        line-height: 1 !important;
         white-space: normal !important;
         margin: 6px 0 !important;
     }
@@ -279,7 +279,7 @@ def render_response_area() -> None:
     if st.session_state.feedback_given:
         st.success("Thank you for your feedback!")
     else:
-        st.write("Was this answer helpful??")
+        st.write("Was this answer helpful?")
         col_yes, col_no, _ = st.columns([1, 1, 5])
         with col_yes:
             st.markdown('<div class="feedback-btn">', unsafe_allow_html=True)
