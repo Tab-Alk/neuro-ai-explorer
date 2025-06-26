@@ -274,7 +274,7 @@ def render_response_area() -> None:
     if st.session_state.feedback_given:
         st.success("Thank you for your feedback!")
     else:
-        st.write("Was this answer helpful?")
+        st.write("Was this answer helpful??")
         col_yes, col_no, _ = st.columns([1, 1, 5])
         with col_yes:
             st.markdown('<div class="feedback-btn">', unsafe_allow_html=True)
