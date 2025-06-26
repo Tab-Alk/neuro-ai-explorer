@@ -17,7 +17,7 @@ st.markdown("""
         font-size: 0.9rem !important;
         border-radius: 6px !important;
         height: auto !important;
-        width: auto !important;   /* shrink to content */
+        width: 100% !important;
         min-height: 0 !important;
         line-height: 1.2 !important;
         white-space: normal !important;
@@ -195,8 +195,8 @@ def render_apple_style_input_area() -> None:
     st.markdown(
         """
         <style>
-        /* --- Apple‑style pill button for starter questions only --- */
-        .starter-btn div.stButton > button:first-child {
+        /* --- Apple‑style pill button for Streamlit native buttons --- */
+        div.stButton > button:first-child {
             background:#FFFFFF !important;
             border:1px solid #D0D0D0;
             border-radius:20px;
@@ -210,12 +210,12 @@ def render_apple_style_input_area() -> None:
             margin:16px;
             width:100%;
         }
-        .starter-btn div.stButton > button:first-child:hover{
+        div.stButton > button:first-child:hover{
             border-color:#007aff;
             color:#007aff;
             background:#f7f9fc !important;
         }
-        .starter-btn div.stButton > button:first-child:focus{
+        div.stButton > button:first-child:focus{
             border:1.5px solid #007aff;
             color:#007aff;
             background:#f0f8ff !important;
@@ -236,12 +236,10 @@ def render_apple_style_input_area() -> None:
         cols = st.columns([1, 1, 1], gap="medium")
         for i, q in enumerate(STARTER_QUESTIONS):
             with cols[i]:
-                st.markdown('<div class="starter-btn">', unsafe_allow_html=True)
                 if st.button(q, key=f"starter_{i}", use_container_width=True):
                     st.session_state.user_query = q
                     handle_query(q, from_starter=True)
                     st.rerun()
-                st.markdown('</div>', unsafe_allow_html=True)
 
         st.write("")
         st.markdown(
@@ -282,7 +280,7 @@ def render_response_area() -> None:
         with st.expander("Related Questions to Explore", expanded=False):
             for i, q in enumerate(st.session_state.related_questions):
                 st.markdown('<div class="related-q-btn">', unsafe_allow_html=True)
-                if st.button(q, key=f"rel_q_{i}"):
+                if st.button(q, key=f"rel_q_{i}_{hash(q)}", use_container_width=True):
                     st.session_state.user_query = q
                     st.rerun()
                 st.markdown('</div>', unsafe_allow_html=True)
@@ -307,11 +305,11 @@ def render_response_area() -> None:
         col_yes, col_no, _ = st.columns([1, 1, 5])
         with col_yes:
             st.markdown('<div class="feedback-btn">', unsafe_allow_html=True)
-            st.button("Yes", key="feedback_yes", on_click=set_feedback)
+            st.button("Yes", key="feedback_yes", on_click=set_feedback, use_container_width=True)
             st.markdown('</div>', unsafe_allow_html=True)
         with col_no:
             st.markdown('<div class="feedback-btn">', unsafe_allow_html=True)
-            st.button("No", key="feedback_no", on_click=set_feedback)
+            st.button("No", key="feedback_no", on_click=set_feedback, use_container_width=True)
             st.markdown('</div>', unsafe_allow_html=True)
 
 
