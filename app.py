@@ -17,7 +17,7 @@ st.markdown("""
         font-size: 0.9rem !important;
         border-radius: 6px !important;
         height: auto !important;
-        width: 100% !important;
+        width: auto !important;   /* shrink to content */
         min-height: 0 !important;
         line-height: 1.2 !important;
         white-space: normal !important;
@@ -282,7 +282,7 @@ def render_response_area() -> None:
         with st.expander("Related Questions to Explore", expanded=False):
             for i, q in enumerate(st.session_state.related_questions):
                 st.markdown('<div class="related-q-btn">', unsafe_allow_html=True)
-                if st.button(q, key=f"rel_q_{i}_{hash(q)}", use_container_width=True):
+                if st.button(q, key=f"rel_q_{i}"):
                     st.session_state.user_query = q
                     st.rerun()
                 st.markdown('</div>', unsafe_allow_html=True)
@@ -307,11 +307,11 @@ def render_response_area() -> None:
         col_yes, col_no, _ = st.columns([1, 1, 5])
         with col_yes:
             st.markdown('<div class="feedback-btn">', unsafe_allow_html=True)
-            st.button("Yes", key="feedback_yes", on_click=set_feedback, use_container_width=True)
+            st.button("Yes", key="feedback_yes", on_click=set_feedback)
             st.markdown('</div>', unsafe_allow_html=True)
         with col_no:
             st.markdown('<div class="feedback-btn">', unsafe_allow_html=True)
-            st.button("No", key="feedback_no", on_click=set_feedback, use_container_width=True)
+            st.button("No", key="feedback_no", on_click=set_feedback)
             st.markdown('</div>', unsafe_allow_html=True)
 
 
