@@ -119,30 +119,30 @@ def render_apple_style_input_area() -> None:
     st.markdown(
         """
         <style>
-        .pill-btn, .pill-btn-active {
-            background: #FFFFFF !important;
-            border: 1px solid #D0D0D0;
-            border-radius: 20px;
-            padding: 36px 48px;
-            font: 600 1.15rem -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            color: #1D1D1F;
-            text-align: center;
-            transition: 0.2s;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-            margin: 16px;
+        /* --- Apple‑style pill button for Streamlit native buttons --- */
+        div.stButton > button:first-child {
+            background:#FFFFFF !important;
+            border:1px solid #D0D0D0;
+            border-radius:20px;
+            padding:36px 48px;
+            font:600 1.15rem -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+            color:#1D1D1F;
+            text-align:center;
+            transition:0.2s;
+            cursor:pointer;
+            box-shadow:0 4px 12px rgba(0,0,0,0.06);
+            margin:16px;
+            width:100%;
         }
-
-        .pill-btn:hover {
-            border-color: #007aff;
-            color: #007aff;
-            background: #f7f9fc !important;
+        div.stButton > button:first-child:hover{
+            border-color:#007aff;
+            color:#007aff;
+            background:#f7f9fc !important;
         }
-
-        .pill-btn-active {
-            border: 1.5px solid #007aff;
-            color: #007aff;
-            background: #f0f8ff !important;
+        div.stButton > button:first-child:focus{
+            border:1.5px solid #007aff;
+            color:#007aff;
+            background:#f0f8ff !important;
         }
         input[data-testid="stTextInput"]{
             font-size:1.2rem;
@@ -160,12 +160,10 @@ def render_apple_style_input_area() -> None:
         cols = st.columns([1, 1, 1], gap="medium")
         for i, q in enumerate(STARTER_QUESTIONS):
             with cols[i]:
-                button_id = f"starter_{i}"
-                if st.button(" ", key=button_id):
+                if st.button(q, key=f"starter_{i}", use_container_width=True):
                     st.session_state.user_query = q
                     handle_query(q, from_starter=True)
                     st.rerun()
-                st.markdown(f"<div class='pill-btn'>{q}</div>", unsafe_allow_html=True)
 
         st.write("")
         st.markdown(
