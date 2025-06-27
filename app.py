@@ -144,7 +144,7 @@ def highlight_text(source_text: str, generated_answer: str, threshold: float = 0
     return " ".join(out)
 
 
-# ─────────────────────────  Source display helper  ───────────────────────────
+
 # ─────────────────────────  Source display helper  ───────────────────────────
 def render_sources(retrieved_docs: list, answer: str) -> None:
     """
@@ -246,7 +246,7 @@ def render_header() -> None:
         )
         st.write(
             "It's designed for anyone curious about the cutting edge of AI and "
-            "neuroscience, offering a transparent 'glass box' approach to understanding "
+            "neuroscience, offering a transparent glass box approach to understanding "
             "where information comes from."
         )
         st.markdown("---")
@@ -269,10 +269,17 @@ def render_header() -> None:
         st.markdown("---")
 
         # Creator + Links
-        st.markdown("### Created By: Your Name")
-        st.markdown("[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/yourname)")
-        st.markdown("[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/yourname)")
-        st.markdown("[![Project Repo](https://img.shields.io/badge/Project%20Repo-purple?style=for-the-badge&logo=github&logoColor=white)](https://github.com/yourname/neural-intelligence-lab)")
+        st.markdown("### Created By: Tabarek Alkhalidi")
+
+        st.markdown(
+            "[![GitHub](https://img.shields.io/badge/GitHub-Tab--Alk-black?style=for-the-badge&logo=github)](https://github.com/Tab-Alk)"
+        )
+        st.markdown(
+            "[![LinkedIn](https://img.shields.io/badge/LinkedIn-Tabarek%20Alkhalidi-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/tabarek-alkhalidi/)"
+        )
+        st.markdown(
+            "[![Project Repo](https://img.shields.io/badge/Project%20Repo-Neural%20Intel%20Lab-purple?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Tab-Alk/Neural-Intel-Lab)"
+        )
 
         st.markdown("---")
         st.caption("© 2025 Neural Intelligence Lab. All rights reserved.")
@@ -329,7 +336,7 @@ def render_apple_style_input_area() -> None:
     )
 
     with st.container():
-        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("<div style='margin-top:-1rem'></div>", unsafe_allow_html=True)
         st.markdown('<div class="starter-area">', unsafe_allow_html=True)
         cols = st.columns([1, 1, 1], gap="medium")
         for i, q in enumerate(STARTER_QUESTIONS):
@@ -344,9 +351,11 @@ def render_apple_style_input_area() -> None:
         st.markdown("""
             <style>
             .starter-area div.stButton > button:first-child {
-                min-height: 140px !important;
-                padding: 48px 56px !important;
+                min-height: 180px !important;
+                padding: 56px 64px !important;
                 background: #ECEFF1 !important;
+                font-size: 1.15rem !important;
+                line-height: 1.6 !important;
             }
             </style>
         """, unsafe_allow_html=True)
