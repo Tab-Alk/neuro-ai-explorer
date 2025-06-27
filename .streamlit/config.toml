@@ -1,15 +1,9 @@
 # .streamlit/config.toml
 
-# .streamlit/config.toml
-
 [theme]
-base="light"  # Ensures we're starting from the light theme baseline
-primaryColor="#4A90E2"  # A nice, professional blue for buttons and accents
-backgroundColor="#FFFFFF"  # Pure white for main background
-secondaryBackgroundColor="#F0F2F6"  # Subtle grey for sidebar and widgets
-textColor="#333333"  # Soft black for easier reading
-font="sans serif"  # Clean and modern font for UI
-
-# Optional aesthetic tweaks
-# borderRadius = 0.5
-# sidebarWidth = "280px"
+base="light"
+primaryColor="#003366"              # Classic Deep Navy Blue - professional, strong
+backgroundColor="#FBFBFB"           # Very subtle warm off-white (almost pure white, but softer)
+secondaryBackgroundColor="#ECEFF1"  # Light, cool grey with a hint of blue for sidebar/widgets
+textColor="#343A40"                 # Dark charcoal for primary text
+font="sans serif"                   # Clean, modern, readable font
