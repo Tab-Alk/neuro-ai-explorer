@@ -336,7 +336,7 @@ def render_apple_style_input_area() -> None:
     )
 
     with st.container():
-        st.markdown("<div style='margin-top:-1rem'></div>", unsafe_allow_html=True)
+        st.markdown("<div style='margin-top:-3rem'></div>", unsafe_allow_html=True)
         st.markdown('<div class="starter-area">', unsafe_allow_html=True)
         cols = st.columns([1, 1, 1], gap="medium")
         for i, q in enumerate(STARTER_QUESTIONS):
@@ -349,15 +349,17 @@ def render_apple_style_input_area() -> None:
                 st.markdown('</div>', unsafe_allow_html=True)
         st.markdown('</div>', unsafe_allow_html=True)
         st.markdown("""
-            <style>
-            .starter-area div.stButton > button:first-child {
-                min-height: 180px !important;
-                padding: 56px 64px !important;
-                background: #ECEFF1 !important;
-                font-size: 1.15rem !important;
-                line-height: 1.6 !important;
-            }
-            </style>
+<style>
+.starter-area div.stButton > button:first-child {
+    min-height: 220px !important;
+    padding: 72px 64px !important;
+    background: #ECEFF1 !important;
+    font-size: 1.25rem !important;
+    line-height: 1.8 !important;
+    border-radius: 24px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+</style>
         """, unsafe_allow_html=True)
 
         st.write("")
