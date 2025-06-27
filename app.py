@@ -48,24 +48,25 @@ st.markdown("""
     /* MAIN SPACING FIXES */
     /* Reduce space after title */
     .main h1 {
-        margin-bottom: 0.5rem !important;
+        margin-bottom: 0.2rem !important;
     }
     
     /* Reduce space after subtitle */
     .main .stMarkdown p {
-        margin-bottom: 0.75rem !important;
+        margin-top: 0 !important;
+        margin-bottom: 0.25rem !important;
     }
     
     /* Remove excessive margins from containers */
     .block-container {
-        padding-top: 2rem !important;
-        padding-bottom: 1rem !important;
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
     }
     
     /* Tighten spacing around starter buttons */
     .starter-area {
-        margin-top: 1.5rem !important;
-        margin-bottom: 2rem !important;
+        margin-top: 0.5rem !important;
+        margin-bottom: 1rem !important;
     }
     
     /* Reduce space between starter buttons */
@@ -75,8 +76,8 @@ st.markdown("""
     
     /* Tighten "Ask another question" section */
     .question-input-section {
-        margin-top: 1rem !important;
-        margin-bottom: 1rem !important;
+        margin-top: 0.5rem !important;
+        margin-bottom: 0.5rem !important;
     }
     
     /* Remove default Streamlit spacing */
