@@ -1,18 +1,15 @@
 # .streamlit/config.toml
 
+# .streamlit/config.toml
+
 [theme]
-# The main accent color for interactive elements. (Apple Blue)
-primaryColor="#007aff"
+base="light"  # Ensures we're starting from the light theme baseline
+primaryColor="#4A90E2"  # A nice, professional blue for buttons and accents
+backgroundColor="#FFFFFF"  # Pure white for main background
+secondaryBackgroundColor="#F0F2F6"  # Subtle grey for sidebar and widgets
+textColor="#333333"  # Soft black for easier reading
+font="sans serif"  # Clean and modern font for UI
 
-# The main background of the app. (Apple's off-white/light gray)
-backgroundColor="#FFFFFF"
-
-# Background for elements like expanders and containers. (Clean White)
-secondaryBackgroundColor="#F8F9FB"
-
-# The main text color. (Apple's dark gray/off-black)
-textColor="#1D1D1F"
-
-# The font for the app. "sans serif" lets Streamlit pick the best
-# modern system font, like "San Francisco" on a Mac.
-font="sans serif"
+# Optional aesthetic tweaks
+# borderRadius = 0.5
+# sidebarWidth = "280px"
