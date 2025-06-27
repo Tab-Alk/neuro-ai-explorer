@@ -94,7 +94,7 @@ st.markdown(
     "Ask questions about neurons, neural networks, learning, memory, or decision‑making. "
     "Get answers that explore both worlds of intelligence."
 )
-st.markdown("<br><br><br>", unsafe_allow_html=True)  # Added more spacing
+st.markdown("<br>", unsafe_allow_html=True)
 
 # ─────────────────────────────  State management  ─────────────────────────────
 def initialize_state() -> None:
@@ -299,11 +299,15 @@ def render_apple_style_input_area() -> None:
         """
         <style>
         /* --- Consistent styling for starter question buttons --- */
-        .starter-btn div.stButton > button:first-child {
+        .starter-area {
+            margin: 2rem 0 3rem 0 !important;
+        }
+        
+        .starter-area div.stButton > button:first-child {
             background: #FFFFFF !important;
             border: 1px solid #D0D0D0 !important;
             border-radius: 20px !important;
-            padding: 24px 32px !important;
+            padding: 2rem 1.5rem !important;
             font: 600 1.1rem -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
             color: #1D1D1F !important;
             text-align: center !important;
@@ -312,9 +316,8 @@ def render_apple_style_input_area() -> None:
             box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
             margin: 0 !important;
             width: 100% !important;
-            min-height: 180px !important;
-            max-height: 180px !important;
-            height: 180px !important;
+            min-height: 200px !important;
+            height: 200px !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
@@ -324,7 +327,7 @@ def render_apple_style_input_area() -> None:
             overflow: hidden !important;
         }
         
-        .starter-btn div.stButton > button:first-child:hover {
+        .starter-area div.stButton > button:first-child:hover {
             border-color: #007aff !important;
             color: #007aff !important;
             background: #f7f9fc !important;
@@ -332,16 +335,11 @@ def render_apple_style_input_area() -> None:
             box-shadow: 0 6px 16px rgba(0,0,0,0.12) !important;
         }
         
-        .starter-btn div.stButton > button:first-child:focus {
+        .starter-area div.stButton > button:first-child:focus {
             border: 2px solid #007aff !important;
             color: #007aff !important;
             background: #f0f8ff !important;
             outline: none !important;
-        }
-        
-        /* Container styling for consistent spacing */
-        .starter-container {
-            margin: 40px 0 60px 0 !important;
         }
         
         /* Input styling */
@@ -359,22 +357,19 @@ def render_apple_style_input_area() -> None:
     )
 
     # Container for starter questions with proper spacing
-    st.markdown('<div class="starter-container">', unsafe_allow_html=True)
+    st.markdown('<div class="starter-area">', unsafe_allow_html=True)
     
     cols = st.columns([1, 1, 1], gap="large")
     for i, q in enumerate(STARTER_QUESTIONS):
         with cols[i]:
-            st.markdown('<div class="starter-btn">', unsafe_allow_html=True)
             if st.button(q, key=f"starter_{i}", use_container_width=True):
                 st.session_state.user_query = q
                 handle_query(q, from_starter=True)
                 st.rerun()
-            st.markdown('</div>', unsafe_allow_html=True)
     
     st.markdown('</div>', unsafe_allow_html=True)
 
     # Question input section
-    st.markdown("<br><br>", unsafe_allow_html=True)  # More spacing before input section
     st.markdown(
         "<h4 style='text-align:center;color:#1D1D1F;margin-bottom:24px;"
         "font-size:2rem;font-weight:700'>"
