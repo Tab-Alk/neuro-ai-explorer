@@ -185,21 +185,16 @@ def handle_query(query: str, from_starter: bool = False) -> None:
 
 # ───────────────────────────────  UI builders  ────────────────────────────────
 def render_header() -> None:
-    """Title + one-line explainer, centred."""
-    st.markdown(
-        """
-        <h1 style='text-align:center;font-size:2.8rem;font-weight:700;margin:0'>
-            The Neural Intelligence Lab
-        </h1>
-        <p style='text-align:center;font-size:1.25rem;color:#6e6e73;margin-top:8px'>
-            Compare how brains and artificial intelligence actually work. 
-            Ask questions about neurons, neural networks, learning, memory, or 
-            decision‑making. Get answers that explore both worlds of intelligence.
-        </p>
-        """,
-        unsafe_allow_html=True,
-    )
-    st.write("")  # 16 px spacer
+    """Title + one-line explainer, now moved to sidebar."""
+    with st.sidebar:
+        st.markdown("## About This App")
+        st.markdown(
+            "Compare how biological brains and artificial intelligence actually work. "
+            "Ask questions about neurons, neural networks, learning, memory, or decision‑making. "
+            "Get answers that explore both worlds of intelligence."
+        )
+        st.markdown("---")
+        st.markdown("**Created by:** Your Name  \n[GitHub](https://github.com/yourname) | [LinkedIn](https://linkedin.com/in/yourname)")
 
 
 def render_apple_style_input_area() -> None:
@@ -345,6 +340,7 @@ def render_response_area() -> None:
 # ────────────────────────────────  Main flow  ────────────────────────────────
 initialize_state()
 render_header()
+st.markdown("<br>", unsafe_allow_html=True)
 render_apple_style_input_area()
 
 if st.session_state.user_query and st.session_state.user_query != st.session_state.active_starter:
