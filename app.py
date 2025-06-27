@@ -50,6 +50,11 @@ st.markdown("""
 # ────────────────────────────  App configuration  ─────────────────────────────
 st.set_page_config(page_title="The Neural Intelligence Lab", layout="wide")
 
+# Add title and description at the top of the main script
+st.title("The Neural Intelligence Lab")
+st.markdown("Explore how biological and artificial intelligence differ—and intersect.")
+st.markdown("<br>", unsafe_allow_html=True)
+
 # ─────────────────────────────  State management  ─────────────────────────────
 def initialize_state() -> None:
     if "response" not in st.session_state:
@@ -187,14 +192,16 @@ def handle_query(query: str, from_starter: bool = False) -> None:
 def render_header() -> None:
     """Title + one-line explainer, now moved to sidebar."""
     with st.sidebar:
-        st.markdown("## About This App")
+        st.sidebar.header("About This App 🧠")
+        st.sidebar.markdown("---")
         st.markdown(
             "Compare how biological brains and artificial intelligence actually work. "
             "Ask questions about neurons, neural networks, learning, memory, or decision‑making. "
             "Get answers that explore both worlds of intelligence."
         )
-        st.markdown("---")
-        st.markdown("**Created by:** Your Name  \n[GitHub](https://github.com/yourname) | [LinkedIn](https://linkedin.com/in/yourname)")
+        st.sidebar.subheader("Created by: Your Name")
+        st.sidebar.markdown("🔗 [GitHub](https://github.com/yourname)")
+        st.sidebar.markdown("💼 [LinkedIn](https://linkedin.com/in/yourname)")
 
 
 def render_apple_style_input_area() -> None:
@@ -245,6 +252,7 @@ def render_apple_style_input_area() -> None:
     )
 
     with st.container():
+        st.markdown("<br>", unsafe_allow_html=True)
         st.markdown('<div class="starter-area">', unsafe_allow_html=True)
         cols = st.columns([1, 1, 1], gap="medium")
         for i, q in enumerate(STARTER_QUESTIONS):
@@ -310,9 +318,8 @@ def render_response_area() -> None:
                 st.markdown('</div>', unsafe_allow_html=True)
 
     # Sources section
-    st.markdown("---")
     st.subheader("Sources")
-    with st.expander("View Retrieved Context"):
+    with st.expander("View Retrieved Sources"):
         retrieved_docs = resp.get("sources", [])
         render_sources(retrieved_docs, resp["answer"])
 
