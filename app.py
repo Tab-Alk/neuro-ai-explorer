@@ -200,11 +200,10 @@ def handle_query(query: str, from_starter: bool = False) -> None:
 def render_header() -> None:
     """Layered sidebar introduction."""
     with st.sidebar:
-        st.title("Neural Intelligence Lab")
+        st.markdown("### What is this App?")
         st.markdown("---")
 
         # Executive Summary
-        st.markdown("### What is this App? ")
         st.write(
             "Welcome to the **Neural Intelligence Lab**! This interactive web application "
             "allows you to explore the fascinating connections and distinctions between "
