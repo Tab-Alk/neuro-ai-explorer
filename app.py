@@ -47,12 +47,12 @@ st.markdown("""
     
     /* MAIN SPACING FIXES */
     /* Reduce space after title */
-    section.main h1 {
+    .main h1 {
         margin-bottom: 0.2rem !important;
     }
     
     /* Reduce space after subtitle */
-    section.main div.stMarkdown p {
+    .main .stMarkdown p {
         margin-top: 0 !important;
         margin-bottom: 0.25rem !important;
     }
@@ -124,29 +124,6 @@ section[data-testid="stSidebar"] {
 section.main {
     background-color: #FBF8F6;
 }
-</style>
-""", unsafe_allow_html=True)
-
-# --- Spacing override patch ---
-st.markdown("""
-<style>
-/* 1. Tighten title & subtitle */
-section.main h1 { margin-bottom: 0.2rem !important; }
-section.main div.stMarkdown p { margin: 0 0 0.25rem 0 !important; }
-
-/* 2. Tighten "Ask another question" heading */
-.question-input-section h4 { margin: 0.25rem 0 0.5rem 0 !important; }
-
-/* 3. Compact starter buttons */
-.starter-btn div.stButton > button:first-child {
-    padding: 12px 18px !important;
-    min-height: unset !important;
-    line-height: 1.3 !important;
-}
-.starter-btn { margin: 4px 0 !important; }
-
-/* 4. Trim margin under text input */
-div[data-testid="stTextInput"] { margin-bottom: 0.3rem !important; }
 </style>
 """, unsafe_allow_html=True)
 
