@@ -48,11 +48,44 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ────────────────────────────  App configuration  ─────────────────────────────
+
 st.set_page_config(
     page_title="The Neural Intelligence Lab",
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# --- Claude-style visual enhancements ---
+st.markdown("""
+<style>
+/* White input box */
+div[data-testid="stTextInput"] > div > div > input {
+    background-color: #FFFFFF;
+    border: 1px solid #E0E0E0;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-size: 1.05rem;
+}
+
+/* Starter question buttons - pure white */
+.starter-area div.stButton > button:first-child {
+    background: #FFFFFF !important;
+    color: #1D1D1F !important;
+    border: 1px solid #D0D0D0 !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Sidebar background override */
+section[data-testid="stSidebar"] {
+    background-color: #F0EEEB !important;
+}
+
+/* Main background override */
+section.main {
+    background-color: #FBF8F6;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # Add title and description at the top of the main script
 st.title("The Neural Intelligence Lab")

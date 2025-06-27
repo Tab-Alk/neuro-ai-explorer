@@ -1,9 +1,9 @@
 # .streamlit/config.toml
 
 [theme]
-base = "light"
-primaryColor = "#003366"
-backgroundColor = "#FFFFFF"           # Main content area: true white
-secondaryBackgroundColor = "#F5F7FA"  # Sidebar: very light gray-blue (for soft contrast)
-textColor = "#343A40"
-font = "sans serif"
+base="light"
+primaryColor="#0047AB"       # A rich, deep blue for accents (buttons, selections). This will stand out nicely.
+backgroundColor="#FBF8F6"      # Main page background: Very light, warm beige/cream
+secondaryBackgroundColor="#F0EEEB" # Sidebar & default widget backgrounds: Slightly darker, warm light beige/grey
+textColor="#333333"          # Main text color: Dark grey for good readability
+font="sans serif"
