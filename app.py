@@ -44,6 +44,45 @@ st.markdown("""
     .feedback-btn, .related-q-btn {
         margin: 4px 0 !important;
     }
+    
+    /* MAIN SPACING FIXES */
+    /* Reduce space after title */
+    .main h1 {
+        margin-bottom: 0.5rem !important;
+    }
+    
+    /* Reduce space after subtitle */
+    .main .stMarkdown p {
+        margin-bottom: 0.75rem !important;
+    }
+    
+    /* Remove excessive margins from containers */
+    .block-container {
+        padding-top: 2rem !important;
+        padding-bottom: 1rem !important;
+    }
+    
+    /* Tighten spacing around starter buttons */
+    .starter-area {
+        margin-top: 1.5rem !important;
+        margin-bottom: 2rem !important;
+    }
+    
+    /* Reduce space between starter buttons */
+    .starter-area .stButton {
+        margin-bottom: 0.75rem !important;
+    }
+    
+    /* Tighten "Ask another question" section */
+    .question-input-section {
+        margin-top: 1rem !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    /* Remove default Streamlit spacing */
+    .stMarkdown > div {
+        margin-bottom: 0 !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -87,14 +126,13 @@ section.main {
 </style>
 """, unsafe_allow_html=True)
 
-# Add title and description at the top of the main script
+# Add title and description at the top of the main script with tighter spacing
 st.title("The Neural Intelligence Lab")
 st.markdown(
     "Compare how biological brains and artificial intelligence actually work. "
     "Ask questions about neurons, neural networks, learning, memory, or decision‑making. "
     "Get answers that explore both worlds of intelligence."
 )
-st.markdown("<div style='margin-top:0.5rem'></div>", unsafe_allow_html=True)
 
 # ─────────────────────────────  State management  ─────────────────────────────
 def initialize_state() -> None:
@@ -255,7 +293,7 @@ def render_header() -> None:
         st.markdown("### Technical Details:")
         st.markdown(
             "This application is powered by a modern **Retrieval-Augmented Generation (RAG) pipeline** "
-            "designed for explainable and high-quality knowledge discovery. Here’s a quick overview of its core components:"
+            "designed for explainable and high-quality knowledge discovery. Here's a quick overview of its core components:"
         )
         st.markdown("""
         * **Brain (LLM):** Leverages **Llama 3** via **Groq** for high-speed, intelligent answer generation.  
@@ -285,8 +323,6 @@ def render_header() -> None:
         st.caption("© 2025 Neural Intelligence Lab. All rights reserved.")
         st.caption("Version 1.0")
 
-# Remove the logo image if present (e.g. st.image("static/logo.png", width=120))
-
 
 def render_apple_style_input_area() -> None:
     STARTER_QUESTIONS = [
@@ -303,15 +339,16 @@ def render_apple_style_input_area() -> None:
             background: #ECEFF1 !important;  /* more contrasting light gray-blue */
             border:1px solid #D0D0D0;
             border-radius:20px;
-            padding:36px 48px;
-            font:600 1.15rem -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+            padding:24px 32px !important;  /* Reduced from 36px 48px */
+            font:600 1.1rem -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;  /* Slightly smaller font */
             color:#1D1D1F;
             text-align:center;
             transition:0.2s;
             cursor:pointer;
             box-shadow:0 4px 12px rgba(0,0,0,0.06);
-            margin:16px;
+            margin:8px 0 !important;  /* Reduced from 16px */
             width:100%;
+            min-height: 80px !important;  /* Reduced from 120px */
         }
         .starter-btn div.stButton > button:first-child:hover{
             border-color:#007aff;
@@ -324,9 +361,9 @@ def render_apple_style_input_area() -> None:
             background:#f0f8ff !important;
         }
         input[data-testid="stTextInput"]{
-            font-size:1.2rem;
-            padding:22px 24px !important;
-            height:72px !important;
+            font-size:1.1rem !important;  /* Slightly smaller */
+            padding:16px 20px !important;  /* Reduced from 22px 24px */
+            height:56px !important;  /* Reduced from 72px */
             border-radius:12px !important;
             width:100% !important;
         }
@@ -335,48 +372,40 @@ def render_apple_style_input_area() -> None:
         unsafe_allow_html=True,
     )
 
-    with st.container():
-        st.markdown("<div style='margin-top:-1rem'></div>", unsafe_allow_html=True)
-        st.markdown('<div class="starter-area">', unsafe_allow_html=True)
-        # --- Vertical layout for starter questions ---
-        for i, q in enumerate(STARTER_QUESTIONS):
-            if st.button(q, key=f"starter_{i}", use_container_width=True):
-                st.session_state.user_query = q
-                handle_query(q, from_starter=True)
-                st.rerun()
+    # Wrapper for starter questions with controlled spacing
+    st.markdown('<div class="starter-area">', unsafe_allow_html=True)
+    
+    # --- Vertical layout for starter questions ---
+    for i, q in enumerate(STARTER_QUESTIONS):
+        st.markdown('<div class="starter-btn">', unsafe_allow_html=True)
+        if st.button(q, key=f"starter_{i}", use_container_width=True):
+            st.session_state.user_query = q
+            handle_query(q, from_starter=True)
+            st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
-        st.markdown("""
-            <style>
-            .starter-area div.stButton > button:first-child {
-                min-height: 120px !important;
-                padding: 36px 48px !important;
-                background: #ECEFF1 !important;
-                font-size: 1.15rem !important;
-                line-height: 1.6 !important;
-                width: 100% !important;
-                margin-bottom: 1rem !important;
-            }
-            </style>
-        """, unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
 
-        st.write("")
-        st.markdown(
-            "<h4 style='text-align:center;color:#1D1D1F;margin-bottom:16px;"
-            "font-size:2rem;font-weight:700'>"
-            "Ask another question</h4>",
-            unsafe_allow_html=True,
-        )
+    # Controlled spacing before input section
+    st.markdown('<div class="question-input-section">', unsafe_allow_html=True)
+    st.markdown(
+        "<h4 style='text-align:center;color:#1D1D1F;margin:1.5rem 0 1rem 0;"
+        "font-size:1.8rem;font-weight:700'>"
+        "Ask another question</h4>",
+        unsafe_allow_html=True,
+    )
 
-        # --- Full-width text input ---
-        def set_query_from_input():
-            st.session_state.user_query = st.session_state.input_query.strip()
-        st.text_input(
-            "Ask your question",
-            key="input_query",
-            placeholder="Type here…",
-            on_change=set_query_from_input,
-            label_visibility="collapsed",
-        )
+    # --- Full-width text input ---
+    def set_query_from_input():
+        st.session_state.user_query = st.session_state.input_query.strip()
+    st.text_input(
+        "Ask your question",
+        key="input_query",
+        placeholder="Type here…",
+        on_change=set_query_from_input,
+        label_visibility="collapsed",
+    )
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
 def render_response_area() -> None:
@@ -448,7 +477,6 @@ def render_response_area() -> None:
 # ────────────────────────────────  Main flow  ────────────────────────────────
 initialize_state()
 render_header()
-st.markdown("<br>", unsafe_allow_html=True)
 render_apple_style_input_area()
 
 if st.session_state.user_query and st.session_state.user_query != st.session_state.active_starter:
