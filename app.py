@@ -255,7 +255,7 @@ def render_header() -> None:
         st.markdown("### Technical Details:")
         st.markdown(
             "This application is powered by a modern **Retrieval-Augmented Generation (RAG) pipeline** "
-            "designed for explainable and high-quality knowledge discovery. Here's a quick overview of its core components:"
+            "designed for explainable and high-quality knowledge discovery. Here’s a quick overview of its core components:"
         )
         st.markdown("""
         * **Brain (LLM):** Leverages **Llama 3** via **Groq** for high-speed, intelligent answer generation.  
@@ -298,87 +298,76 @@ def render_apple_style_input_area() -> None:
     st.markdown(
         """
         <style>
-        /* --- Consistent styling for starter question buttons --- */
-        .starter-area {
-            margin: 2rem 0 3rem 0 !important;
+        /* --- Apple‑style pill button for starter questions only --- */
+        .starter-btn div.stButton > button:first-child {
+            background: #ECEFF1 !important;  /* more contrasting light gray-blue */
+            border:1px solid #D0D0D0;
+            border-radius:20px;
+            padding:36px 48px;
+            font:600 1.15rem -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+            color:#1D1D1F;
+            text-align:center;
+            transition:0.2s;
+            cursor:pointer;
+            box-shadow:0 4px 12px rgba(0,0,0,0.06);
+            margin:16px;
+            width:100%;
         }
-        
-        .starter-area div.stButton > button:first-child {
-            background: #FFFFFF !important;
-            border: 1px solid #D0D0D0 !important;
-            border-radius: 20px !important;
-            padding: 2rem 1.5rem !important;
-            font: 600 1.1rem -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
-            color: #1D1D1F !important;
-            text-align: center !important;
-            transition: 0.2s !important;
-            cursor: pointer !important;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
-            margin: 0 !important;
-            width: 100% !important;
-            min-height: 200px !important;
-            height: 200px !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            white-space: normal !important;
-            line-height: 1.4 !important;
-            word-wrap: break-word !important;
-            overflow: hidden !important;
+        .starter-btn div.stButton > button:first-child:hover{
+            border-color:#007aff;
+            color:#007aff;
+            background:#f7f9fc !important;
         }
-        
-        .starter-area div.stButton > button:first-child:hover {
-            border-color: #007aff !important;
-            color: #007aff !important;
-            background: #f7f9fc !important;
-            transform: translateY(-2px) !important;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.12) !important;
+        .starter-btn div.stButton > button:first-child:focus{
+            border:1.5px solid #007aff;
+            color:#007aff;
+            background:#f0f8ff !important;
         }
-        
-        .starter-area div.stButton > button:first-child:focus {
-            border: 2px solid #007aff !important;
-            color: #007aff !important;
-            background: #f0f8ff !important;
-            outline: none !important;
-        }
-        
-        /* Input styling */
-        input[data-testid="stTextInput"] {
-            font-size: 1.2rem !important;
-            padding: 18px 24px !important;
-            height: 60px !important;
-            border-radius: 12px !important;
-            width: 100% !important;
-            border: 1px solid #E0E0E0 !important;
+        input[data-testid="stTextInput"]{
+            font-size:1.2rem;
+            padding:22px 24px !important;
+            height:72px !important;
+            border-radius:12px !important;
+            width:100% !important;
         }
         </style>
         """,
         unsafe_allow_html=True,
     )
 
-    # Container for starter questions with proper spacing
-    st.markdown('<div class="starter-area">', unsafe_allow_html=True)
-    
-    cols = st.columns([1, 1, 1], gap="large")
-    for i, q in enumerate(STARTER_QUESTIONS):
-        with cols[i]:
+    with st.container():
+        st.markdown("<div style='margin-top:-1rem'></div>", unsafe_allow_html=True)
+        st.markdown('<div class="starter-area">', unsafe_allow_html=True)
+        # --- Vertical layout for starter questions ---
+        for i, q in enumerate(STARTER_QUESTIONS):
             if st.button(q, key=f"starter_{i}", use_container_width=True):
                 st.session_state.user_query = q
                 handle_query(q, from_starter=True)
                 st.rerun()
-    
-    st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown("""
+            <style>
+            .starter-area div.stButton > button:first-child {
+                min-height: 120px !important;
+                padding: 36px 48px !important;
+                background: #ECEFF1 !important;
+                font-size: 1.15rem !important;
+                line-height: 1.6 !important;
+                width: 100% !important;
+                margin-bottom: 1rem !important;
+            }
+            </style>
+        """, unsafe_allow_html=True)
 
-    # Question input section
-    st.markdown(
-        "<h4 style='text-align:center;color:#1D1D1F;margin-bottom:24px;"
-        "font-size:2rem;font-weight:700'>"
-        "Ask another question</h4>",
-        unsafe_allow_html=True,
-    )
+        st.write("")
+        st.markdown(
+            "<h4 style='text-align:center;color:#1D1D1F;margin-bottom:16px;"
+            "font-size:2rem;font-weight:700'>"
+            "Ask another question</h4>",
+            unsafe_allow_html=True,
+        )
 
-    col_input, col_button = st.columns([4, 1])
-    with col_input:
+        # --- Full-width text input ---
         def set_query_from_input():
             st.session_state.user_query = st.session_state.input_query.strip()
         st.text_input(
@@ -388,11 +377,6 @@ def render_apple_style_input_area() -> None:
             on_change=set_query_from_input,
             label_visibility="collapsed",
         )
-    with col_button:
-        st.write("")  # spacer
-        if st.button("Clear"):
-            st.session_state.input_query = ""
-            st.session_state.user_query = ""
 
 
 def render_response_area() -> None:
@@ -464,6 +448,7 @@ def render_response_area() -> None:
 # ────────────────────────────────  Main flow  ────────────────────────────────
 initialize_state()
 render_header()
+st.markdown("<br>", unsafe_allow_html=True)
 render_apple_style_input_area()
 
 if st.session_state.user_query and st.session_state.user_query != st.session_state.active_starter:
