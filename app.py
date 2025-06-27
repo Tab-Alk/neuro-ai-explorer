@@ -261,7 +261,7 @@ def render_apple_style_input_area() -> None:
         <style>
         /* --- Apple‑style pill button for starter questions only --- */
         .starter-btn div.stButton > button:first-child {
-            background: #F8F9FB !important;
+            background: #ECEFF1 !important;  /* more contrasting light gray-blue */
             border:1px solid #D0D0D0;
             border-radius:20px;
             padding:36px 48px;
@@ -314,6 +314,7 @@ def render_apple_style_input_area() -> None:
             .starter-area div.stButton > button:first-child {
                 min-height: 140px !important;
                 padding: 48px 56px !important;
+                background: #ECEFF1 !important;
             }
             </style>
         """, unsafe_allow_html=True)
