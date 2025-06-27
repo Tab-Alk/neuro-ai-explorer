@@ -94,7 +94,7 @@ st.markdown(
     "Ask questions about neurons, neural networks, learning, memory, or decision‑making. "
     "Get answers that explore both worlds of intelligence."
 )
-st.markdown("<br>", unsafe_allow_html=True)
+st.markdown("<div style='margin-top:0.5rem'></div>", unsafe_allow_html=True)
 
 # ─────────────────────────────  State management  ─────────────────────────────
 def initialize_state() -> None:
