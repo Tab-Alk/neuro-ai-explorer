@@ -48,7 +48,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ────────────────────────────  App configuration  ─────────────────────────────
-st.set_page_config(page_title="The Neural Intelligence Lab", layout="wide")
+st.set_page_config(
+    page_title="The Neural Intelligence Lab",
+    layout="wide"
+)
 
 # Add title and description at the top of the main script
 st.title("The Neural Intelligence Lab")
@@ -192,7 +195,7 @@ def handle_query(query: str, from_starter: bool = False) -> None:
 def render_header() -> None:
     """Title + one-line explainer, now moved to sidebar."""
     with st.sidebar:
-        st.sidebar.header("About This App 🧠")
+        st.sidebar.header("About This App ")
         st.sidebar.markdown("---")
         st.markdown(
             "Compare how biological brains and artificial intelligence actually work. "
@@ -202,6 +205,8 @@ def render_header() -> None:
         st.sidebar.subheader("Created by: Your Name")
         st.sidebar.markdown("🔗 [GitHub](https://github.com/yourname)")
         st.sidebar.markdown("💼 [LinkedIn](https://linkedin.com/in/yourname)")
+
+# Remove the logo image if present (e.g. st.image("static/logo.png", width=120))
 
 
 def render_apple_style_input_area() -> None:
@@ -281,7 +286,8 @@ def render_apple_style_input_area() -> None:
             unsafe_allow_html=True,
         )
 
-        with st.container():
+        col_input, col_button = st.columns([4, 1])
+        with col_input:
             def set_query_from_input():
                 st.session_state.user_query = st.session_state.input_query.strip()
             st.text_input(
@@ -291,6 +297,11 @@ def render_apple_style_input_area() -> None:
                 on_change=set_query_from_input,
                 label_visibility="collapsed",
             )
+        with col_button:
+            st.write("")  # spacer
+            if st.button("Clear"):
+                st.session_state.input_query = ""
+                st.session_state.user_query = ""
 
 
 def render_response_area() -> None:
@@ -304,7 +315,22 @@ def render_response_area() -> None:
         "font-size:1.6rem;font-weight:700'>Answer</h3>",
         unsafe_allow_html=True,
     )
-    st.write(resp["answer"])
+    with st.container():
+        st.markdown(
+            """
+            <div style="
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                background-color: #ffffff;
+                border-radius: 0.5rem;
+                padding: 1.2rem;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+                font-size: 1.1rem;
+                line-height: 1.6;
+                color: #1D1D1F;
+            ">
+            """ + resp["answer"] + "</div>",
+            unsafe_allow_html=True
+        )
     st.write("")
 
     # Related concepts expander (collapsed by default)
