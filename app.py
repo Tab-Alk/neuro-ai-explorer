@@ -50,7 +50,8 @@ st.markdown("""
 # ────────────────────────────  App configuration  ─────────────────────────────
 st.set_page_config(
     page_title="The Neural Intelligence Lab",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
 # Add title and description at the top of the main script
@@ -193,18 +194,54 @@ def handle_query(query: str, from_starter: bool = False) -> None:
 
 # ───────────────────────────────  UI builders  ────────────────────────────────
 def render_header() -> None:
-    """Title + one-line explainer, now moved to sidebar."""
+    """Layered sidebar introduction."""
     with st.sidebar:
-        st.sidebar.header("About This App ")
-        st.sidebar.markdown("---")
-        st.markdown(
-            "Compare how biological brains and artificial intelligence actually work. "
-            "Ask questions about neurons, neural networks, learning, memory, or decision‑making. "
-            "Get answers that explore both worlds of intelligence."
+        st.title("Neural Intelligence Lab")
+        st.markdown("---")
+
+        # Executive Summary
+        st.markdown("### What is this App? 🚀")
+        st.write(
+            "Welcome to the **Neural Intelligence Lab**! This interactive web application "
+            "allows you to explore the fascinating connections and distinctions between "
+            "**biological brains** and **artificial intelligence**. Ask questions, "
+            "receive AI-generated answers, and discover new concepts in this dynamic "
+            "knowledge platform."
         )
-        st.sidebar.subheader("Created by: Your Name")
-        st.sidebar.markdown("🔗 [GitHub](https://github.com/yourname)")
-        st.sidebar.markdown("💼 [LinkedIn](https://linkedin.com/in/yourname)")
+        st.write(
+            "It's designed for anyone curious about the cutting edge of AI and "
+            "neuroscience, offering a transparent 'glass box' approach to understanding "
+            "where information comes from."
+        )
+        st.markdown("---")
+
+        # Technical Expander
+        with st.expander("🔬 Dive Deeper: Technical Details"):
+            st.markdown("### Under the Hood:")
+            st.markdown(
+                "This application is powered by a modern **Retrieval-Augmented Generation (RAG) pipeline** "
+                "designed for explainable and high-quality knowledge discovery. Here’s a quick overview of its core components:"
+            )
+            st.markdown("""
+            * **Brain (LLM):** Leverages **Llama 3** via **Groq** for high-speed, intelligent answer generation.  
+            * **Memory (Vector DB):** A curated knowledge base is vectorized using **Hugging Face's `all-MiniLM-L6-v2`** embeddings and stored in **ChromaDB**.  
+            * **Reasoning (LangChain):** Orchestrates the entire RAG workflow, from retrieval to answer synthesis.  
+            * **Transparency (Semantic Highlighting):** Employs **scikit-learn** for cosine similarity to visually highlight exact source sentences that inform the AI's answer.  
+            * **Quality Assurance (Ragas):** Includes a quantitative evaluation framework using the **Ragas** library to measure answer faithfulness, relevance, and context utilization.
+            """)
+            st.markdown("This ensures not only accurate answers but also a clear understanding of their provenance.")
+
+        st.markdown("---")
+
+        # Creator + Links
+        st.markdown("### Created By: Your Name")
+        st.markdown("[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/yourname)")
+        st.markdown("[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/yourname)")
+        st.markdown("[![Project Repo](https://img.shields.io/badge/Project%20Repo-purple?style=for-the-badge&logo=github&logoColor=white)](https://github.com/yourname/neural-intelligence-lab)")
+
+        st.markdown("---")
+        st.caption("© 2025 Neural Intelligence Lab. All rights reserved.")
+        st.caption("Version 1.0")
 
 # Remove the logo image if present (e.g. st.image("static/logo.png", width=120))
 
