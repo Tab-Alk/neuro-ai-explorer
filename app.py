@@ -325,6 +325,7 @@ def render_header() -> None:
         st.caption("Version 1.0")
 
 
+# ─────────────────────────  CORRECTED UI BUILDER  ───────────────────────────
 def render_apple_style_input_area() -> None:
     STARTER_QUESTIONS = [
         "Why can deep learning excel at pattern recognition yet still struggle with the common‑sense reasoning that comes naturally to humans?",
@@ -337,19 +338,24 @@ def render_apple_style_input_area() -> None:
         <style>
         /* --- Apple‑style pill button for starter questions only --- */
         .starter-btn div.stButton > button:first-child {
-            background: #ECEFF1 !important;  /* more contrasting light gray-blue */
+            background: #FFFFFF !important;
             border:1px solid #D0D0D0;
-            border-radius:20px;
-            padding:24px 32px !important;  /* Reduced from 36px 48px */
-            font:600 1.1rem -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;  /* Slightly smaller font */
+            border-radius:12px; /* A slightly more modern, less pill-like radius */
+            padding: 16px 20px !important; /* Reduced padding for a tighter feel */
+            font:600 1rem -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
             color:#1D1D1F;
             text-align:center;
             transition:0.2s;
             cursor:pointer;
-            box-shadow:0 4px 12px rgba(0,0,0,0.06);
-            margin:8px 0 !important;  /* Reduced from 16px */
+            box-shadow:0 2px 8px rgba(0,0,0,0.05); /* Softened shadow */
+            
+            /* === SPACING FIX 1: Tighter Button Margins === */
+            /* This now only adds a small margin to the bottom of each button, collapsing the space. */
+            margin: 0 0 0.5rem 0 !important;
+            
             width:100%;
-            min-height: 80px !important;  /* Reduced from 120px */
+            min-height: 0 !important; /* Let padding define the height */
+            height: auto !important;
         }
         .starter-btn div.stButton > button:first-child:hover{
             border-color:#007aff;
@@ -362,9 +368,9 @@ def render_apple_style_input_area() -> None:
             background:#f0f8ff !important;
         }
         input[data-testid="stTextInput"]{
-            font-size:1.1rem !important;  /* Slightly smaller */
-            padding:16px 20px !important;  /* Reduced from 22px 24px */
-            height:56px !important;  /* Reduced from 72px */
+            font-size:1.1rem !important;
+            padding:16px 20px !important;
+            height:56px !important;
             border-radius:12px !important;
             width:100% !important;
         }
@@ -389,9 +395,13 @@ def render_apple_style_input_area() -> None:
 
     # Controlled spacing before input section
     st.markdown('<div class="question-input-section">', unsafe_allow_html=True)
+    
+    # === SPACING FIX 2: Reduced Heading Margins ===
+    # The margin is drastically reduced from '1.5rem 0 1rem 0' to '2rem 0 0.75rem 0'.
+    # This pulls the entire "Ask another question" section up.
     st.markdown(
-        "<h4 style='text-align:center;color:#1D1D1F;margin:1.5rem 0 1rem 0;"
-        "font-size:1.8rem;font-weight:700'>"
+        "<h4 style='text-align:center;color:#1D1D1F;margin: 2rem 0 0.75rem 0;"
+        "font-size:1.5rem;font-weight:600'>"
         "Ask another question</h4>",
         unsafe_allow_html=True,
     )
