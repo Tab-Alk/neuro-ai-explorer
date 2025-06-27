@@ -204,7 +204,7 @@ def render_header() -> None:
         st.markdown("---")
 
         # Executive Summary
-        st.markdown("###What is this App? ")
+        st.markdown("### What is this App? ")
         st.write(
             "Welcome to the **Neural Intelligence Lab**! This interactive web application "
             "allows you to explore the fascinating connections and distinctions between "
@@ -220,7 +220,7 @@ def render_header() -> None:
         st.markdown("---")
 
         # Technical Details (now a regular sidebar block)
-        st.markdown("### Under the Hood:")
+        st.markdown("### Technical Details:")
         st.markdown(
             "This application is powered by a modern **Retrieval-Augmented Generation (RAG) pipeline** "
             "designed for explainable and high-quality knowledge discovery. Here’s a quick overview of its core components:"
