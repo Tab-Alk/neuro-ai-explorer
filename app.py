@@ -56,7 +56,11 @@ st.set_page_config(
 
 # Add title and description at the top of the main script
 st.title("The Neural Intelligence Lab")
-st.markdown("Explore how biological and artificial intelligence differ—and intersect.")
+st.markdown(
+    "Compare how biological brains and artificial intelligence actually work. "
+    "Ask questions about neurons, neural networks, learning, memory, or decision‑making. "
+    "Get answers that explore both worlds of intelligence."
+)
 st.markdown("<br>", unsafe_allow_html=True)
 
 # ─────────────────────────────  State management  ─────────────────────────────
@@ -200,7 +204,7 @@ def render_header() -> None:
         st.markdown("---")
 
         # Executive Summary
-        st.markdown("### What is this App? 🚀")
+        st.markdown("###What is this App? ")
         st.write(
             "Welcome to the **Neural Intelligence Lab**! This interactive web application "
             "allows you to explore the fascinating connections and distinctions between "
@@ -215,21 +219,20 @@ def render_header() -> None:
         )
         st.markdown("---")
 
-        # Technical Expander
-        with st.expander("🔬 Dive Deeper: Technical Details"):
-            st.markdown("### Under the Hood:")
-            st.markdown(
-                "This application is powered by a modern **Retrieval-Augmented Generation (RAG) pipeline** "
-                "designed for explainable and high-quality knowledge discovery. Here’s a quick overview of its core components:"
-            )
-            st.markdown("""
-            * **Brain (LLM):** Leverages **Llama 3** via **Groq** for high-speed, intelligent answer generation.  
-            * **Memory (Vector DB):** A curated knowledge base is vectorized using **Hugging Face's `all-MiniLM-L6-v2`** embeddings and stored in **ChromaDB**.  
-            * **Reasoning (LangChain):** Orchestrates the entire RAG workflow, from retrieval to answer synthesis.  
-            * **Transparency (Semantic Highlighting):** Employs **scikit-learn** for cosine similarity to visually highlight exact source sentences that inform the AI's answer.  
-            * **Quality Assurance (Ragas):** Includes a quantitative evaluation framework using the **Ragas** library to measure answer faithfulness, relevance, and context utilization.
-            """)
-            st.markdown("This ensures not only accurate answers but also a clear understanding of their provenance.")
+        # Technical Details (now a regular sidebar block)
+        st.markdown("### Under the Hood:")
+        st.markdown(
+            "This application is powered by a modern **Retrieval-Augmented Generation (RAG) pipeline** "
+            "designed for explainable and high-quality knowledge discovery. Here’s a quick overview of its core components:"
+        )
+        st.markdown("""
+        * **Brain (LLM):** Leverages **Llama 3** via **Groq** for high-speed, intelligent answer generation.  
+        * **Memory (Vector DB):** A curated knowledge base is vectorized using **Hugging Face's `all-MiniLM-L6-v2`** embeddings and stored in **ChromaDB**.  
+        * **Reasoning (LangChain):** Orchestrates the entire RAG workflow, from retrieval to answer synthesis.  
+        * **Transparency (Semantic Highlighting):** Employs **scikit-learn** for cosine similarity to visually highlight exact source sentences that inform the AI's answer.  
+        * **Quality Assurance (Ragas):** Includes a quantitative evaluation framework using the **Ragas** library to measure answer faithfulness, relevance, and context utilization.
+        """)
+        st.markdown("This ensures not only accurate answers but also a clear understanding of their provenance.")
 
         st.markdown("---")
 
