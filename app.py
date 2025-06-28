@@ -246,6 +246,7 @@ def render_header() -> None:
             "while intelligent question generation guides you through interconnected neural‑AI concepts for a "
             "truly interactive research experience."
         )
+        st.markdown("<div style='margin-bottom: 0.5rem'></div>", unsafe_allow_html=True)
         st.markdown("---")
         st.markdown("### Technical Implementation")
         st.markdown("""
