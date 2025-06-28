@@ -143,6 +143,11 @@ section[data-testid="stSidebar"] {
 
 # Add title and description at the top of the main script
 st.title("The Neural Intelligence Lab")
+st.markdown(
+    "Compare how biological brains and artificial intelligence actually work. "
+    "Ask questions about neurons, neural networks, learning, memory, or decision‑making. "
+    "Get answers that explore both worlds of intelligence."
+)
 
 # ─────────────────────────────  State management & Helpers (NO CHANGES) ─────────────────────────────
 def initialize_state():
@@ -298,24 +303,70 @@ def render_apple_style_input_area() -> None:
     st.markdown('</div>', unsafe_allow_html=True)
 
 
-def render_response_area():
-    # ... (code is correct, no changes needed)
+def render_response_area() -> None:
+    """Answer, sources, and feedback block with one‑time feedback buttons."""
     st.markdown("---")
     resp = st.session_state.response
-    st.markdown("<h3 style='text-align:center; ...'>Answer</h3>", unsafe_allow_html=True)
+
+    # Answer heading
+    st.markdown(
+        "<h3 style='text-align:center;color:#1D1D1F;margin-bottom:12px;"
+        "font-size:1.6rem;font-weight:700'>Answer</h3>",
+        unsafe_allow_html=True,
+    )
     with st.container():
-        st.markdown(f"""<div style="...">{resp["answer"]}</div>""", unsafe_allow_html=True)
+        st.markdown(
+            """
+            <div style="
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                background-color: #ffffff;
+                border-radius: 0.5rem;
+                padding: 1.2rem;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+                font-size: 1.1rem;
+                line-height: 1.6;
+                color: #1D1D1F;
+            ">
+            """ + resp["answer"] + "</div>",
+            unsafe_allow_html=True
+        )
     st.write("")
+
+    # Related concepts expander (collapsed by default)
     if st.session_state.related_questions:
         with st.expander("Related Questions to Explore", expanded=False):
-            # ... loop for related questions ...
-            pass
+            for i, q in enumerate(st.session_state.related_questions):
+                st.markdown('<div class="related-q-btn">', unsafe_allow_html=True)
+                if st.button(q, key=f"rel_q_{i}_{hash(q)}", use_container_width=True):
+                    st.session_state.user_query = q
+                    st.rerun()
+                st.markdown('</div>', unsafe_allow_html=True)
+
+    # Sources section
     st.subheader("Sources")
     with st.expander("View Retrieved Sources"):
-        render_sources(resp.get("sources", []), resp["answer"])
+        retrieved_docs = resp.get("sources", [])
+        render_sources(retrieved_docs, resp["answer"])
+
     st.markdown("---")
-    # ... feedback logic ...
-    pass
+
+    # ------------- Feedback logic -------------
+    def set_feedback():
+        st.session_state.feedback_given = True
+
+    if st.session_state.feedback_given:
+        st.success("Thank you for your feedback!")
+    else:
+        st.write("Was this answer helpful?")
+        col_yes, col_no, _ = st.columns([1, 1, 5])
+        with col_yes:
+            st.markdown('<div class="feedback-btn">', unsafe_allow_html=True)
+            st.button("Yes", key="feedback_yes", on_click=set_feedback, use_container_width=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+        with col_no:
+            st.markdown('<div class="feedback-btn">', unsafe_allow_html=True)
+            st.button("No", key="feedback_no", on_click=set_feedback, use_container_width=True)
+            st.markdown('</div>', unsafe_allow_html=True)
 
 
 # ────────────────────────────────  Main flow (REVISED) ────────────────────────────────
