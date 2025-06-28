@@ -249,12 +249,12 @@ def render_header() -> None:
         st.markdown("---")
         st.markdown("### Technical Implementation")
         st.markdown("""
-        * **Document Ingestion & Vectorization** – Curated research content processed into high‑dimensional embeddings and indexed in **ChromaDB** for semantic search  
-        * **Semantic Context Retrieval** – Vector similarity matching identifies and extracts the most relevant knowledge‑base passages for each user query  
-        * **Large Language Model Synthesis** – Groq‑hosted **Llama 3 70B** processes retrieved context to generate coherent, accurate responses grounded in source materials  
-        * **Source Attribution Pipeline** – Embedding‑based similarity analysis automatically highlights the specific passages that support each generated answer  
-        * **Intelligent Question Suggestion** – A secondary language model analyzes conversation context to recommend follow‑up questions for continued exploration  
-        * **Automated Quality Assurance** – The **Ragas** evaluation framework continuously assesses response accuracy, source faithfulness, and contextual relevance using standardized RAG metrics
+        * **Knowledge Vectorization** – Curated research content processed into high‑dimensional embeddings and indexed in **ChromaDB** for semantic search  
+        * **Context Retrieval** – Vector similarity matching identifies and extracts the most relevant knowledge‑base passages for each query  
+        * **Response Generation** – Groq‑hosted **Llama 3 70B** processes retrieved context to generate coherent, source‑grounded responses  
+        * **Source Attribution** – Embedding‑based analysis automatically highlights specific passages that support each generated answer  
+        * **Question Recommendation** – A secondary language model analyzes conversation context to suggest relevant follow‑up questions  
+        * **Quality Assessment** – The **Ragas** framework continuously evaluates response accuracy, source faithfulness, and contextual relevance
         """)
         st.markdown("---")
         # Creator + Links
