@@ -236,6 +236,7 @@ def render_header() -> None:
     """Layered sidebar introduction."""
     with st.sidebar:
         st.markdown("### What is this App?")
+        st.markdown("---")
         st.write(
             "The Neural Intelligence Lab is a specialized research tool for exploring the intersection of neuroscience and artificial intelligence. "
             "Built on a curated knowledge base of expert research, it delivers accurate, source-backed answers while eliminating hallucinations through "
@@ -245,8 +246,9 @@ def render_header() -> None:
             "Every response includes highlighted source passages and intelligent follow-up questions, transforming complex queries into guided research sessions "
             "with complete transparency and verifiability."
         )
-        st.write("Ready to begin? Select a starter question or ask your own to see the engine in action.")
+        st.markdown("**Ready to begin?**  \nStart by clicking a starter question or asking your own!", unsafe_allow_html=True)
         st.markdown("<div style='margin-bottom: 0.5rem'></div>", unsafe_allow_html=True)
+        st.markdown("---")
         st.markdown("---")
         st.markdown("### Technical Implementation")
         st.markdown("""
