@@ -237,25 +237,23 @@ def render_header() -> None:
     with st.sidebar:
         st.markdown("### What is this App?")
         st.write(
-            "Welcome to the **Neural Intelligence Lab**! This web application demonstrates advanced "
-            "Retrieval‑Augmented Generation (RAG) techniques to answer complex questions about neuroscience "
-            "and artificial intelligence, using a curated research database and explainable AI features."
+            "The Neural Intelligence Lab is a specialized research tool for exploring the intersection of neuroscience and artificial intelligence. "
+            "Built on a curated knowledge base of expert research, it delivers accurate, source-backed answers while eliminating hallucinations through "
+            "advanced RAG architecture."
         )
         st.write(
-            "Source attribution with visual highlighting provides full transparency into the AI's reasoning, "
-            "while intelligent question generation guides you through interconnected neural‑AI concepts for a "
-            "truly interactive research experience."
+            "Every response includes highlighted source passages and intelligent follow-up questions, transforming complex queries into guided research sessions "
+            "with complete transparency and verifiability."
         )
+        st.write("Ready to begin? Select a starter question or ask your own to see the engine in action.")
         st.markdown("<div style='margin-bottom: 0.5rem'></div>", unsafe_allow_html=True)
         st.markdown("---")
         st.markdown("### Technical Implementation")
         st.markdown("""
-        * **Knowledge Vectorization** – Curated research content processed into high‑dimensional embeddings and indexed in **ChromaDB** for semantic search  
-        * **Context Retrieval** – Vector similarity matching identifies and extracts the most relevant knowledge‑base passages for each query  
-        * **Response Generation** – Groq‑hosted **Llama 3 70B** processes retrieved context to generate coherent, source‑grounded responses  
-        * **Source Attribution** – Embedding‑based analysis automatically highlights specific passages that support each generated answer  
-        * **Question Recommendation** – A secondary language model analyzes conversation context to suggest relevant follow‑up questions  
-        * **Quality Assessment** – The **Ragas** framework continuously evaluates response accuracy, source faithfulness, and contextual relevance
+        * **Semantic Retrieval (ChromaDB & all-MiniLM-L6-v2)** – The pipeline's knowledge base is a vectorized library of curated research. For each query, a high-speed similarity search retrieves the most contextually potent passages to inform the response.  
+        * **Generation Engine (Llama 3 70B & Groq)** – The system leverages the **Llama 3 70B** model, served via the massively parallel **Groq API**. This allows for near-instant synthesis of complex, source-grounded answers, ensuring a fluid user experience.  
+        * **Explainability Layer (Custom Analysis & LLM Chaining)** – Beyond generation, the system provides sentence-level source attribution through a custom similarity analysis. This layer also chains to a secondary LLM for intelligent question recommendation, guiding user exploration.  
+        * **Evaluation Framework (Ragas)** – The pipeline's integrity is rigorously benchmarked using the **Ragas** framework, providing continuous, automated assessment of answer faithfulness, accuracy, and contextual relevance.
         """)
         st.markdown("---")
         # Creator + Links
