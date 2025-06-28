@@ -236,36 +236,41 @@ def render_header() -> None:
     """Layered sidebar introduction."""
     with st.sidebar:
         st.markdown("### What is this App?")
-        st.markdown("---")
         st.write(
-            "Welcome to the **Neural Intelligence Lab**! This interactive web application "
-            "allows you to explore the fascinating connections and distinctions between "
-            "**biological brains** and **artificial intelligence**."
+            "Welcome to the **Neural Intelligence Lab**! This web application demonstrates advanced "
+            "Retrieval‑Augmented Generation (RAG) techniques to answer complex questions about neuroscience "
+            "and artificial intelligence, using a curated research database and explainable AI features."
         )
         st.write(
-            "It's designed for anyone curious about the cutting edge of AI and "
-            "neuroscience, offering a transparent glass box approach to understanding "
-            "where information comes from."
+            "Source attribution with visual highlighting provides full transparency into the AI's reasoning, "
+            "while intelligent question generation guides you through interconnected neural‑AI concepts for a "
+            "truly interactive research experience."
         )
         st.markdown("---")
-        st.markdown("### Technical Details:")
-        st.markdown(
-            "This app is powered by a **Retrieval-Augmented Generation (RAG)** pipeline..."
-        )
+        st.markdown("### Technical Implementation")
         st.markdown("""
-        * **Brain (LLM):** Llama 3 via Groq
-        * **Memory (Vector DB):** ChromaDB with `all-MiniLM-L6-v2` embeddings
-        * **Reasoning (LangChain):** Orchestrates the RAG workflow
-        * **Transparency:** Semantic highlighting via scikit-learn
-        * **Quality Assurance:** Evaluation using the Ragas library
+        * **Document Ingestion & Vectorization** – Curated research content processed into high‑dimensional embeddings and indexed in **ChromaDB** for semantic search  
+        * **Semantic Context Retrieval** – Vector similarity matching identifies and extracts the most relevant knowledge‑base passages for each user query  
+        * **Large Language Model Synthesis** – Groq‑hosted **Llama 3 70B** processes retrieved context to generate coherent, accurate responses grounded in source materials  
+        * **Source Attribution Pipeline** – Embedding‑based similarity analysis automatically highlights the specific passages that support each generated answer  
+        * **Intelligent Question Suggestion** – A secondary language model analyzes conversation context to recommend follow‑up questions for continued exploration  
+        * **Automated Quality Assurance** – The **Ragas** evaluation framework continuously assesses response accuracy, source faithfulness, and contextual relevance using standardized RAG metrics
         """)
         st.markdown("---")
+        # Creator + Links
         st.markdown("### Created By: Tabarek Alkhalidi")
-        st.markdown("[![GitHub](...)]...") # Shortened for brevity
-        st.markdown("[![LinkedIn](...)]...")
-        st.markdown("[![Project Repo](...)]...")
+
+        st.markdown(
+            "[![GitHub](https://img.shields.io/badge/GitHub-Tab--Alk-black?style=for-the-badge&logo=github)](https://github.com/Tab-Alk)"
+        )
+        st.markdown(
+            "[![LinkedIn](https://img.shields.io/badge/LinkedIn-Tabarek%20Alkhalidi-blue?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/tabarek-alkhalidi/)"
+        )
+        st.markdown(
+            "[![Project Repo](https://img.shields.io/badge/Project%20Repo-Neural%20Intel%20Lab-purple?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Tab-Alk/Neural-Intel-Lab)"
+        )
         st.markdown("---")
-        st.caption("© 2025 Neural Intelligence Lab. V1.0")
+        st.caption("© 2025 The Neural Intelligence Lab. V1.0")
 
 
 def render_apple_style_input_area() -> None:
