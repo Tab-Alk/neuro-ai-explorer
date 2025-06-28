@@ -143,11 +143,6 @@ section[data-testid="stSidebar"] {
 
 # Add title and description at the top of the main script
 st.title("The Neural Intelligence Lab")
-st.markdown(
-    "Compare how biological brains and artificial intelligence actually work. "
-    "Ask questions about neurons, neural networks, learning, memory, or decision‑making. "
-    "Get answers that explore both worlds of intelligence."
-)
 
 # ─────────────────────────────  State management & Helpers (NO CHANGES) ─────────────────────────────
 def initialize_state():
