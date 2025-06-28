@@ -245,7 +245,8 @@ def render_header() -> None:
             "Every response includes highlighted source passages and intelligent follow-up questions, transforming complex queries into guided research sessions "
             "with complete transparency and verifiability."
         )
-        st.markdown("**Ready to begin?**  \nStart by clicking a starter question or asking your own!", unsafe_allow_html=True)        st.markdown("<div style='margin-bottom: 0.5rem'></div>", unsafe_allow_html=True)
+        st.markdown("**Ready to begin?**  \nStart by clicking a starter question or asking your own!", unsafe_allow_html=True)       
+        st.markdown("<div style='margin-bottom: 0.5rem'></div>", unsafe_allow_html=True)
         st.markdown("---")
         st.markdown("### Technical Implementation")
         st.markdown("""
