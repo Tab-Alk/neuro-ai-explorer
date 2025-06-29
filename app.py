@@ -237,28 +237,26 @@ def render_header() -> None:
     with st.sidebar:
         st.markdown("### What is this App?")
         st.write(
-            "The Neural Intelligence Lab is a specialized research tool for exploring the intersection of neuroscience and artificial intelligence. "
-            "Built on a curated knowledge base of expert research, it delivers accurate, source-backed answers while eliminating hallucinations through "
-            "advanced RAG architecture."
+            "The Neural Intelligence Lab is a specialized AI-powered research tool designed to accelerate literature reviews and comparative analyses in neuroscience and artificial intelligence."
         )
         st.write(
-            "Every response includes highlighted source passages and intelligent follow-up questions, transforming complex queries into guided research sessions "
-            "with complete transparency and verifiability."
+            "It solves the challenge of navigating vast scientific data by intelligently parsing and synthesizing diverse research, delivering accurate, source-backed answers."
         )
-        st.markdown("**Ready to begin?**  \nStart by clicking a starter question or asking your own!", unsafe_allow_html=True)       
+        st.write(
+            "Every response features highlighted sources and intelligent follow-up questions, providing transparent, verifiable, and guided research sessions."
+        )
+        st.markdown("**Ready to begin?**  \nStart by clicking a starter question or asking your own!", unsafe_allow_html=True)
         st.markdown("<div style='margin-bottom: 0.5rem'></div>", unsafe_allow_html=True)
         st.markdown("---")
         st.markdown("### Technical Implementation")
         st.markdown("""
-        * **Semantic Retrieval (ChromaDB & all-MiniLM-L6-v2)** – The pipeline's knowledge base is a vectorized library of curated research. For each query, a high-speed similarity search retrieves the most contextually potent passages to inform the response.  
-        * **Generation Engine (Llama 3 70B & Groq)** – The system leverages the **Llama 3 70B** model, served via the massively parallel **Groq API**. This allows for near-instant synthesis of complex, source-grounded answers, ensuring a fluid user experience.  
-        * **Explainability Layer (Custom Analysis & LLM Chaining)** – Beyond generation, the system provides sentence-level source attribution through a custom similarity analysis. This layer also chains to a secondary LLM for intelligent question recommendation, guiding user exploration.  
-        * **Evaluation Framework (Ragas)** – The pipeline's integrity is rigorously benchmarked using the **Ragas** framework, providing continuous, automated assessment of answer faithfulness, accuracy, and contextual relevance.
+        * **Multi-Format Document Ingestion (LlamaParse):** Robustly parses complex PDFs and other research documents, expanding the knowledge base for comprehensive insights.  
+        * **Intelligent RAG Pipeline (LangChain, Groq LLMs):** Combines advanced retrieval (ChromaDB) with powerful Llama 3 models for precise, hallucination-free answers.  
+        * **Explainability & Discovery:** Provides semantic source highlighting and AI-generated follow-up questions for transparent and guided exploration.  
+        * **Quantitative Evaluation (Ragas):** Ensures continuous quality assurance of answer faithfulness and relevance.
         """)
         st.markdown("---")
-        # Creator + Links
         st.markdown("### Created By: Tabarek Alkhalidi")
-
         st.markdown(
             "[![GitHub](https://img.shields.io/badge/GitHub-Tab--Alk-black?style=for-the-badge&logo=github)](https://github.com/Tab-Alk)"
         )
@@ -269,7 +267,7 @@ def render_header() -> None:
             "[![Project Repo](https://img.shields.io/badge/Project%20Repo-Neural%20Intel%20Lab-purple?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Tab-Alk/Neural-Intel-Lab)"
         )
         st.markdown("---")
-        st.caption("© 2025 The Neural Intelligence Lab. V1.0")
+        st.caption("© 2025 The Neural Intelligence Lab. V2.0")
 
 
 def render_apple_style_input_area() -> None:

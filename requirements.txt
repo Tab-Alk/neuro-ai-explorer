@@ -11,12 +11,14 @@ sentence-transformers
 # PDF parsing and preprocessing
 pypdf
 unstructured
+llama-index
+llama-parse
+
+
 
 # Streamlit frontend
 streamlit
 
-# SQLite (remove if unused)
-pysqlite3-binary
 
 # Similarity search
 thefuzz
