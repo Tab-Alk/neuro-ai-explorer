@@ -22,10 +22,15 @@ sentence-transformers
 llama-parse
 llama-index
 pypdf
+
+
 # Explicitly add a recent, compatible version of unstructured
 unstructured[all-docs]>=0.14.0
+olefile>=0.46.0 # <-- ADD THIS LINE to ensure a Python 3 compatible version
 # Required by JSONLoader's jq_schema argument
 jq
+
+
 
 # --- Utilities & Data Science ---
 # For loading .env files

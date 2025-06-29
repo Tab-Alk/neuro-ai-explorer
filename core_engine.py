@@ -1,4 +1,5 @@
-# (The conditional patch for pysqlite3 at the top remains)
+# core engine.py
+#  (The conditional patch for pysqlite3 at the top remains)
 try:
     __import__('pysqlite3')
     import sys
@@ -6,6 +7,7 @@ try:
 except ModuleNotFoundError:
     pass
 from llama_parse import LlamaParse
+from langchain_chroma import Chroma
 
 import os
 import re
