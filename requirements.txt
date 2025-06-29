@@ -9,6 +9,7 @@ langchain
 langchain-core
 langchain-community
 langchain-groq
+langchain-huggingface
 
 # --- Vector Database & Embeddings ---
 # This IS the correct package for the "from langchain_chroma import Chroma" import
