@@ -40,3 +40,6 @@ pysqlite3-binary; platform_system=="Linux"
 # --- Evaluation (as mentioned in UI) ---
 # Optional, but included as it's part of the project's documented stack
 ragas
+
+
+protobuf==3.20.3
