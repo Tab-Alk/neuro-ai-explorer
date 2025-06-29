@@ -1,34 +1,42 @@
-# Core LLM/RAG tools
-langchain
-langchain-community
-langchain-huggingface
-langchain-groq
+# requirements.txt
 
-# Vector store + Embeddings
-chromadb
-sentence-transformers
-
-# PDF parsing and preprocessing
-pypdf
-unstructured
-llama-index
-llama-parse
-
-
-
-# Streamlit frontend
+# --- Streamlit Frontend ---
 streamlit
 
+# --- Core LangChain & LLM Connectors ---
+# The new, modular LangChain packages
+langchain
+langchain-core
+langchain-community
+langchain-groq
 
-# Similarity search
-thefuzz
-python-Levenshtein
+# --- Vector Database & Embeddings ---
+# This IS the correct package for the "from langchain_chroma import Chroma" import
+langchain-chroma
+# The underlying vector database
+chromadb
+# Required for HuggingFaceEmbeddings
+sentence-transformers
+
+# --- Document Parsing & Ingestion ---
+# The LlamaParse library and its key dependencies
+llama-parse
+llama-index
+pypdf
+unstructured
+# Required by JSONLoader's jq_schema argument
 jq
 
-# Evaluation (optional)
-ragas
+# --- Utilities & Data Science ---
+# For loading .env files
+python-dotenv
+# For cosine similarity calculation in app.py
+scikit-learn
+# For numerical operations in app.py
+numpy
+# For sqlite compatibility on Streamlit Cloud
+pysqlite3-binary
 
-# Utility
-python-dotenv     
-scikit-learn      
-numpy             
+# --- Evaluation (as mentioned in UI) ---
+# Optional, but included as it's part of the project's documented stack
+ragas
